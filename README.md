@@ -1,2 +1,2 @@
 # Soldout_Test_Server_Mango_Flein
-라이징테스트_서버_솔드아웃a_망고_플라인
+라이징테스트_서버_솔드아웃_a_망고_플라인
