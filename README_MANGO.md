@@ -12,6 +12,16 @@
 <details>
 <summary>22.01.09</summary>
 <div markdown="1">       
-- ERD 설계
+- ERD 설계 1차
+</div>
+</details>
+<details>
+<summary>22.01.10</summary>
+<div markdown="1">       
+- ERD 설계 2차 <br />
+- API 명세서 작성 1차 <br />
+- 회원가입API <br />
+- 로그인 API <br />
+- 회원조회 API
 </div>
 </details>
