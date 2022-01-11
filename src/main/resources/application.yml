@@ -1,0 +1,15 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: demo
+
+  datasource:
+    platform: mysql
+    url: jdbc:mysql://soldout.cpiugfta2jm5.ap-northeast-2.rds.amazonaws.com:3306/o?autoReconnect=true # 변경해주세요
+    username:  admin
+    password:  mango1030
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    open-in-view: false
