@@ -7,9 +7,9 @@ spring:
 
   datasource:
     platform: mysql
-    url: jdbc:mysql://soldout.cpiugfta2jm5.ap-northeast-2.rds.amazonaws.com:3306/o?autoReconnect=true # 변경해주세요
-    username:  admin
-    password:  mango1030
+    url: jdbc:mysql://rc3-soldout.cqesugzhomqg.ap-northeast-2.rds.amazonaws.com:3306/SOLDOUT?autoReconnect=true # 변경해주세요
+    username: minadmin
+    password: soldout135!
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     open-in-view: false

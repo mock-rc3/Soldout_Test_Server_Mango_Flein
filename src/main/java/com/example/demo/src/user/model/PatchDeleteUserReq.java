@@ -9,5 +9,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PatchDeleteUserReq {
     private int user_id;
-    private String Status;
+    private int Status;
 }

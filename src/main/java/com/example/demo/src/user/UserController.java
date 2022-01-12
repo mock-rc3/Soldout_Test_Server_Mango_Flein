@@ -99,6 +99,10 @@ public class UserController {
         if (postUserReq.getNickname() == null) {
             return new BaseResponse<>(POST_USERS_EMPTY_NICKNAME);
         }
+        //닉네임 길이 제한
+        if(!nickNamePattern(postUserReq.getNickname())){
+            return new BaseResponse<>(POST_USERS_INVALID_NICKNAME);
+        }
         try {
             PostUserRes postUserRes = userService.createUser(postUserReq);
             return new BaseResponse<>(postUserRes);
@@ -132,14 +136,16 @@ public class UserController {
     }
 
     /**
-     * 아이디 정규표현 점검
+     * 닉네임 길이 점검
      *
      * @param str
-     * @return t : 포함, f : 미포함
+     * @return t , f
      */
     public boolean nickNamePattern(String str) {
-        String pattern = "^{5,11}$";
-        boolean result = Pattern.matches(pattern, str);
+        boolean result = false;
+        if(str.length()<9&&str.length()>2){
+            result = true;
+        }
         return result;
     }
 
@@ -162,7 +168,7 @@ public class UserController {
         }
         try {
             // 탈퇴한 회원
-            if (userProvider.checkStatus(postLoginReq.getId()).equals("N")) {
+            if (userProvider.checkStatus(postLoginReq.getId())==0) {
                 return new BaseResponse<>(USERS_STATUS_DELETE);
             }
             PostLoginRes postLoginRes = userProvider.logIn(postLoginReq);
@@ -188,13 +194,8 @@ public class UserController {
             if (user_id != userIdByJwt) {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
-            PatchDeleteUserReq patchDeleteUseReq = new PatchDeleteUserReq(user_id, "N");
+            PatchDeleteUserReq patchDeleteUseReq = new PatchDeleteUserReq(user_id, 0);
             userService.deleteUser(patchDeleteUseReq);
-
-            /*Timestamp updateTime = Timestamp.valueOf(LocalDateTime.now());
-            PatchUpdateCustomerReq patchUpdateCustomerReq = new PatchUpdateCustomerReq(user_id, updateTime) ;
-            userService.modifyCustomerUpdateAt(patchUpdateCustomerReq);*/
-
             String result = "삭제 성공";
             return new BaseResponse<>(result);
         } catch (BaseException exception) {
@@ -235,6 +236,9 @@ public class UserController {
             int userIdByJwt = jwtService.getUserId();
             if (user_id != userIdByJwt) {
                 return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            if(!nickNamePattern(user.getNickname())){
+                return new BaseResponse<>(POST_USERS_INVALID_NICKNAME);
             }
             PatchUserReq patchUserReq = new PatchUserReq(user_id, user.getNickname());
             userService.modifyNickName(patchUserReq);

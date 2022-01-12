@@ -109,9 +109,9 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-    public String checkStatus(String status) throws BaseException {
+    public int checkStatus(String id) throws BaseException {
         try {
-            return userDao.checkStatus(status);
+            return userDao.checkStatus(id);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

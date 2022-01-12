@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="soldout" uuid="224f0b54-da20-4ba3-a063-ac88c47feef4">
+    <data-source source="LOCAL" name="@rc3-soldout.cqesugzhomqg.ap-northeast-2.rds.amazonaws.com" uuid="5eaee926-738d-41d0-ae51-d28355b502a4">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://soldout.cpiugfta2jm5.ap-northeast-2.rds.amazonaws.com:3306</jdbc-url>
+      <jdbc-url>jdbc:mysql://rc3-soldout.cqesugzhomqg.ap-northeast-2.rds.amazonaws.com:3306</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

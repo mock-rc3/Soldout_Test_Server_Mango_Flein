@@ -38,7 +38,7 @@ public enum BaseResponseStatus {
     POST_USERS_INVALID_PASSWORD(false, 2025, "비밀번호 규칙에 맞지 않습니다. 영문/숫자/특수문자를 포함하여 8자~20자로 구성해주세요."),
     POST_USERS_EMPTY_PHONENUM(false, 2026, "핸드폰번호를 입력해주세요."),
     POST_USERS_EXISTS_PHONENUM(false,2027,"중복된 핸드폰번호입니다."),
-
+    POST_USERS_INVALID_NICKNAME(false, 2028, "닉네임 규칙에 맞지 않습니다. 3자~8자로 구성해주세요."),
 
     /**
      * 3000 : Response 오류
