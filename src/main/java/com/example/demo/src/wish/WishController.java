@@ -1,0 +1,94 @@
+package com.example.demo.src.wish;
+
+import com.example.demo.config.BaseException;
+import com.example.demo.config.BaseResponse;
+import com.example.demo.src.wish.model.GetWishRes;
+import com.example.demo.src.wish.model.PostWishReq;
+import com.example.demo.src.wish.model.PostWishRes;
+import com.example.demo.utils.JwtService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import static com.example.demo.config.BaseResponseStatus.INVALID_USER_JWT;
+
+@RestController
+@RequestMapping("/wishes")
+public class WishController {
+
+    final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private final WishProvider wishProvider;
+    @Autowired
+    private final WishService wishService;
+    @Autowired
+    private final JwtService jwtService;;
+
+
+    public WishController(WishProvider wishProvider, WishService wishService, JwtService jwtService) {
+        this.wishProvider = wishProvider;
+        this.wishService = wishService;
+        this.jwtService = jwtService;
+    }
+    /**
+     *  고객 찜 조회 API
+     *  [GET] /wishes/:userId
+     *  @return BaseResponse<List<GetWishRes>>
+     */
+    @ResponseBody
+    @GetMapping("/{userId}")
+    public BaseResponse<List<GetWishRes>> getWish(@PathVariable("userId") int userId){
+        try {
+            List<GetWishRes> getWishRes = wishProvider.getWish(userId);
+            return new BaseResponse<>(getWishRes);
+        }catch (BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 찜 생성 /wishes
+     * @param postWishReq
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("")
+    public BaseResponse<PostWishRes> createWish(@RequestBody PostWishReq postWishReq) {
+        try {
+            int userIdByJwt = jwtService.getUserId();
+            PostWishRes postWishRes = wishService.createWish(userIdByJwt,postWishReq);
+            return new BaseResponse<>(postWishRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * * 찜 삭제 /wishes/:wishId/:userId/delete
+     * @param favoriteId
+     * @return BaseResponse<String>
+     */
+
+    @ResponseBody
+    @PatchMapping("/{wishId}/{userId}/delete")
+    @Transactional(rollbackFor = Exception.class)
+    public BaseResponse<String> deleteWish(@PathVariable("wishId") int favoriteId, @PathVariable("userId") int userId) {
+        try {
+            int userIdByJwt = jwtService.getUserId();
+            if (userId != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            wishService.deleteWish(favoriteId);
+            String result = "찜 삭제 성공";
+            return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+}
