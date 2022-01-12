@@ -38,3 +38,18 @@
 - 아이디 찾기 API
 </div>
 </details>
+<summary>22.01.12</summary>
+<div markdown="1">       
+- 위 API 서버 반영
+</div>
+</details>
+<summary>22.01.13</summary>
+<div markdown="1">       
+- 배송지 추가 API <br />
+- 배송지 삭제 API <br />
+- 배송지 조회 API <br />
+- 찜 추가 API <br />
+- 찜 삭제 API <br />
+- 찜 조회 API 
+</div>
+</details>
