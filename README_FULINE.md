@@ -20,5 +20,14 @@
 
 1. ERD , API명세서 수정 
 2. product ,  image, magazine  데이터 크롤링 코드 작성 
-
 3. 1차 피드백 
+
+2021-01-12
+
+1.  product, image, magazine ,purchase 테이블 데이터 삽입
+2.  테이블명 대문자로 변경 
+3. API 개발
+   - 신규 발매 상품 조회
+   - 상품 랭킹 조회
+   - 알림 등록
+   - 발매 예정 조회
