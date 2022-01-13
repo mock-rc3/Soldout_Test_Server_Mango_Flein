@@ -52,7 +52,24 @@ public class ProductDao {
                 )
         );
     }
-
+    public List<GetRankRes> getRankProductFilter(String category){
+        String getContentQuery = "SELECT I.url ,P.product_name, P.price FROM PRODUCT P\n" +
+                "LEFT JOIN IMAGE I \n" +
+                "ON P.product_id = I.product_id\n" +
+                "WHERE P.price != 0\n" +
+                "AND P.category = ?\n" +
+                "GROUP BY product_name\n" +
+                "ORDER BY click_count desc\n" +
+                "LIMIT 30";
+        String getRankFilterParam = category;
+        return this.jdbcTemplate.query(getContentQuery,
+                (rs,rowNum) -> new GetRankRes(
+                        rs.getString("url"),
+                        rs.getString("product_name"),
+                        rs.getInt("price")
+                ),getRankFilterParam
+        );
+    }
     public List<GetReleaseRes> getReleaseProduct(){
         String getContentQuery = "SELECT P.product_name,P.release_day, P.price,I.url FROM PRODUCT P\n" +
                 "LEFT JOIN IMAGE I \n" +

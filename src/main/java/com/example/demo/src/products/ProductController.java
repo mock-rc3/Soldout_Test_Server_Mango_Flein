@@ -9,10 +9,7 @@ import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -49,11 +46,17 @@ public class ProductController {
 
     @ResponseBody
     @GetMapping("/rank")
-    public BaseResponse<List<GetRankRes>> getRankProduct() {
+    public BaseResponse<List<GetRankRes>> getRankProduct(@RequestParam(value="category",required=false) String category) {
         try{
             // Get Users
-            List<GetRankRes> getRankRes = productprovider.getRankProduct();
-            return new BaseResponse<>(getRankRes);
+            if(category == null){
+                List<GetRankRes> getRankRes = productprovider.getRankProduct();
+                return new BaseResponse<>(getRankRes);
+            }else{
+                List<GetRankRes> getRankRes = productprovider.getRankProductFilter(category);
+                return new BaseResponse<>(getRankRes);
+            }
+
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }

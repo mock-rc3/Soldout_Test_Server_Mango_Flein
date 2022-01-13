@@ -34,7 +34,15 @@ public class ProductProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
+    public List<GetRankRes> getRankProductFilter(String category) throws BaseException {
+        try{
+            List<GetRankRes> getRankRes = productDao.getRankProductFilter(category);
+            return getRankRes;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
     public List<GetRankRes> getRankProduct() throws BaseException {
         try{
             List<GetRankRes> getRankRes = productDao.getRankProduct();
