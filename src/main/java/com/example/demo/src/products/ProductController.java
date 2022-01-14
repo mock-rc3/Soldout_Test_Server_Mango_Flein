@@ -2,9 +2,7 @@ package com.example.demo.src.products;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.products.model.GetNewRes;
-import com.example.demo.src.products.model.GetRankRes;
-import com.example.demo.src.products.model.GetReleaseRes;
+import com.example.demo.src.products.model.*;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
-public class ProductController {
+public class  ProductController {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -63,12 +61,50 @@ public class ProductController {
     }
 
     @ResponseBody
+    @GetMapping("/search")
+    public BaseResponse<List<GetSearchRes>> getSearchProduct(@RequestParam(value="category",required=false) String category,@RequestParam(value="keyword",required=false) String keyword) {
+        try{
+            // Get Users
+            if(category == null && keyword == null ){
+                List<GetSearchRes> getSearchRes = productprovider.getSearchProduct();
+                return new BaseResponse<>(getSearchRes);
+            }
+            else if(category == null && keyword != null ){
+                List<GetSearchRes> getRankRes = productprovider.getSearchKeywordFilter(keyword);
+                return new BaseResponse<>(getRankRes);
+            }
+            else if(category != null && keyword == null ){
+                List<GetSearchRes> getRankRes = productprovider.getSearchCategoryFilter(category);
+                return new BaseResponse<>(getRankRes);
+            }else{
+                List<GetSearchRes> getRankRes = productprovider.getSearchFilter(category,keyword);
+                return new BaseResponse<>(getRankRes);
+            }
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @ResponseBody
     @GetMapping("/release")
     public BaseResponse<List<GetReleaseRes>> getReleaseProduct() {
         try{
             // Get Users
             List<GetReleaseRes> getReleaseRes = productprovider.getReleaseProduct();
             return new BaseResponse<>(getReleaseRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/hotissue")
+    public BaseResponse<List<GetHotissueRes>> getHotissue() {
+        try{
+            // Get Users
+            List<GetHotissueRes> getHotissueRes = productprovider.getHotissue();
+            return new BaseResponse<>(getHotissueRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
