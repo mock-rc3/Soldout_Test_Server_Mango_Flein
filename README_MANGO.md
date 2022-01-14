@@ -56,3 +56,12 @@
 - 서버 반영
 </div>
 </details>
+<details>
+<summary>22.01.13</summary>
+<div markdown="1">       
+- 매거진 전체 조회 API <br />
+- 매거진 타입별 조회 API <br />
+- 매거진 상세 조회 API <br />
+- 서버 반영
+</div>
+</details>
