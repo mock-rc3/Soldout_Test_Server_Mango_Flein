@@ -49,6 +49,10 @@ public enum BaseResponseStatus {
     //[GET] /users
     USERS_EMPTY_USERID(false, 3010, "존재하지 않는 회원입니다."),
 
+    //[GET] /megazines
+    MAGAZINES_EMPTY_TYPE(false, 3011, "존재하지 않는 타입입니다."),
+    MAGAZINES_EMPTY_ID(false, 3012, "존재하지 않는 magazine_id 입니다."),
+
     // [POST] /users
     DUPLICATED_EMAIL(false, 3013, "중복된 이메일입니다."),
     FAILED_TO_LOGIN(false,3014,"없는 아이디거나 비밀번호가 틀렸습니다."),
