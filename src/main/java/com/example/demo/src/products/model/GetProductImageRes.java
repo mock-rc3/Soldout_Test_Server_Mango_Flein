@@ -1,5 +1,6 @@
 package com.example.demo.src.products.model;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,11 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetSearchRes {
-    private int product_id;
+public class GetProductImageRes {
     private String url;
-    private String brand;
-    private String brand_image;
-    private String product_name;
-    private int total_price;
 }

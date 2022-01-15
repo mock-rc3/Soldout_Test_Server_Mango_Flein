@@ -46,7 +46,7 @@ public class  ProductController {
     @GetMapping("/rank")
     public BaseResponse<List<GetRankRes>> getRankProduct(@RequestParam(value="category",required=false) String category) {
         try{
-            // Get Users
+
             if(category == null){
                 List<GetRankRes> getRankRes = productprovider.getRankProduct();
                 return new BaseResponse<>(getRankRes);
@@ -59,6 +59,85 @@ public class  ProductController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    @ResponseBody
+    @GetMapping("/brand/{brandName}")
+    public BaseResponse<List<GetRelateRecommendRes>> getRelateRecommend(@PathVariable("brandName") String brandName) {
+        try{
+
+            List<GetRelateRecommendRes> getRelateRecommendRes = productprovider.getRelateRecommend(brandName);
+            return new BaseResponse<>(getRelateRecommendRes);
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/detailimage/{productId}")
+    public BaseResponse<List<GetProductImageRes>> getDetailProductImage(@PathVariable("productId") int productId) {
+        try{
+
+            List<GetProductImageRes> getProductImageRes = productprovider.getDetailProductImage(productId);
+            return new BaseResponse<>(getProductImageRes);
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/topinform/{productId}")
+    public BaseResponse<List<GetTopInforRes>> getDetailTopInformation(@PathVariable("productId") int productId) {
+        try{
+
+            List<GetTopInforRes> getTopInforRes = productprovider.getDetailTopInformation(productId);
+            return new BaseResponse<>(getTopInforRes);
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/recent/{productId}")
+    public BaseResponse<List<GetRecentRes>> getDetailRecent(@PathVariable("productId") int productId) {
+        try{
+
+            List<GetRecentRes> getRecentRes = productprovider.getDetailRecent(productId);
+            return new BaseResponse<>(getRecentRes);
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/deal/{productId}/{types}")
+    public BaseResponse<List<GetDealRes>> getDetailDeal(@PathVariable("productId") int productId,@PathVariable("types") String types) {
+        try{
+
+            List<GetDealRes> getDealRes = productprovider.getDetailDeal(productId,types);
+            return new BaseResponse<>(getDealRes);
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/information/{productId}")
+    public BaseResponse<List<GetInformationRes>> getDetailInformation(@PathVariable("productId") int productId) {
+        try{
+
+            List<GetInformationRes> getInformationRes = productprovider.getDetailInformation(productId);
+            return new BaseResponse<>(getInformationRes);
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 
     @ResponseBody
     @GetMapping("/search")

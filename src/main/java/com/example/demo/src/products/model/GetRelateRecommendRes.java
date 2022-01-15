@@ -7,10 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetSearchRes {
-    private int product_id;
+public class GetRelateRecommendRes {
     private String url;
-    private String brand;
     private String brand_image;
     private String product_name;
     private int total_price;

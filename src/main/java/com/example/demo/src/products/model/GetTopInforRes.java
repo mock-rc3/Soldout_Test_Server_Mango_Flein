@@ -7,11 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetSearchRes {
-    private int product_id;
-    private String url;
-    private String brand;
+public class GetTopInforRes {
     private String brand_image;
     private String product_name;
-    private int total_price;
+    private String product_name_eng;
+    private int max_count;
+    private String diff_count;
+    private String percent;
 }
