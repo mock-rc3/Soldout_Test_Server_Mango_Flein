@@ -33,6 +33,67 @@ public class ProductProvider {
         }
     }
 
+    public List<GetRelateRecommendRes> getRelateRecommend( String brandName) throws BaseException {
+        try{
+            List<GetRelateRecommendRes> getRelateRecommendRes = productDao.getRelateRecommend(brandName );
+            return getRelateRecommendRes;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetTopInforRes> getDetailTopInformation(int productId) throws BaseException {
+        try{
+            List<GetTopInforRes> getTopInforRes = productDao.getDetailTopInformation(productId);
+            return getTopInforRes;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetProductImageRes> getDetailProductImage(int productId) throws BaseException {
+        try{
+            List<GetProductImageRes> getProductImageRes = productDao.getDetailProductImage(productId);
+            return getProductImageRes;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetRecentRes> getDetailRecent(int productId) throws BaseException {
+        try{
+            List<GetRecentRes> getRecentRes = productDao.getDetailRecent(productId);
+            return getRecentRes;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetDealRes> getDetailDeal(int productId,String types) throws BaseException {
+        try{
+            List<GetDealRes> getDealRes = productDao.getDetailDeal(productId,types);
+            return getDealRes;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetInformationRes> getDetailInformation(int productId) throws BaseException {
+        try{
+            List<GetInformationRes> getInformationRes = productDao.getDetailInformation(productId);
+            return getInformationRes;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
     public List<GetSearchRes> getSearchProduct() throws BaseException {
         try{
             List<GetSearchRes> getSearchProduct = productDao.getSearchProduct();
