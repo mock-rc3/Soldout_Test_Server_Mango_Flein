@@ -8,6 +8,8 @@ com/example/demo/config/Constant.java
  com.example.demo.config.Constant
 com/example/demo/src/products/model/GetReleaseRes.java
  com.example.demo.src.products.model.GetReleaseRes
+com/example/demo/src/orderHistory/OrderHistoryService.java
+ com.example.demo.src.orderHistory.OrderHistoryService
 com/example/demo/utils/ValidationRegex.java
  com.example.demo.utils.ValidationRegex
 com/example/demo/src/wish/WishController.java
@@ -20,6 +22,8 @@ com/example/demo/src/notices/NoticeProvider.java
  com.example.demo.src.notices.NoticeProvider
 com/example/demo/src/wish/WishDao.java
  com.example.demo.src.wish.WishDao
+com/example/demo/src/orderHistory/OrderHistoryDao.java
+ com.example.demo.src.orderHistory.OrderHistoryDao
 com/example/demo/src/user/model/PatchDeleteUserReq.java
  com.example.demo.src.user.model.PatchDeleteUserReq
 com/example/demo/src/magazine/MagazineController.java
@@ -52,6 +56,8 @@ com/example/demo/src/address/AddressDao.java
  com.example.demo.src.address.AddressDao
 com/example/demo/config/BaseException.java
  com.example.demo.config.BaseException
+com/example/demo/src/products/model/GetHotissueRes.java
+ com.example.demo.src.products.model.GetHotissueRes
 com/example/demo/src/products/ProductService.java
  com.example.demo.src.products.ProductService
 com/example/demo/src/magazine/model/GetMagazineRes.java
@@ -66,6 +72,8 @@ com/example/demo/src/user/model/GetFindIdRes.java
  com.example.demo.src.user.model.GetFindIdRes
 com/example/demo/src/wish/model/PostWishReq.java
  com.example.demo.src.wish.model.PostWishReq
+com/example/demo/src/orderHistory/OrderHistoryController.java
+ com.example.demo.src.orderHistory.OrderHistoryController
 com/example/demo/src/user/model/PostLoginRes.java
  com.example.demo.src.user.model.PostLoginRes
 com/example/demo/src/user/UserDao.java
@@ -78,12 +86,16 @@ com/example/demo/src/user/model/PatchUserReq.java
  com.example.demo.src.user.model.PatchUserReq
 com/example/demo/src/WebSecurityConfig.java
  com.example.demo.src.WebSecurityConfig
+com/example/demo/src/orderHistory/OrderHistoryProvider.java
+ com.example.demo.src.orderHistory.OrderHistoryProvider
 com/example/demo/src/test/TestController.java
  com.example.demo.src.test.TestController
 com/example/demo/src/user/model/PostLoginReq.java
  com.example.demo.src.user.model.PostLoginReq
 com/example/demo/src/address/model/PostAddressReq.java
  com.example.demo.src.address.model.PostAddressReq
+com/example/demo/src/products/model/GetSearchRes.java
+ com.example.demo.src.products.model.GetSearchRes
 com/example/demo/src/user/UserController.java
  com.example.demo.src.user.UserController
 com/example/demo/src/magazine/MagazineProvider.java
