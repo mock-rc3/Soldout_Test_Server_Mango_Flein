@@ -126,6 +126,19 @@ public class  ProductController {
     }
 
     @ResponseBody
+    @GetMapping("/sizes/{productId}/{types}")
+    public BaseResponse<List<GetSizePrice>> getSizeTransPrice(@PathVariable("productId") int productId,@PathVariable("types") String types) {
+        try{
+
+            List<GetSizePrice> getSizePrice = productprovider.getSizeTransPrice(productId,types);
+            return new BaseResponse<>(getSizePrice);
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @ResponseBody
     @GetMapping("/information/{productId}")
     public BaseResponse<List<GetInformationRes>> getDetailInformation(@PathVariable("productId") int productId) {
         try{

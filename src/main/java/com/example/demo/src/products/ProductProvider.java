@@ -83,6 +83,16 @@ public class ProductProvider {
         }
     }
 
+    public List<GetSizePrice> getSizeTransPrice(int productId,String types) throws BaseException {
+        try{
+            List<GetSizePrice> getSizePrice = productDao.getSizeTransPrice(productId,types);
+            return getSizePrice;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     public List<GetInformationRes> getDetailInformation(int productId) throws BaseException {
         try{
             List<GetInformationRes> getInformationRes = productDao.getDetailInformation(productId);
