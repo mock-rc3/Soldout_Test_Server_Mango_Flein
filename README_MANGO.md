@@ -66,7 +66,7 @@
 </div>
 </details>
 <details>
-<summary>22.01.15,6</summary>
+<summary>22.01.15~16</summary>
 <div markdown="1">       
 - 타입별 상품 판매/구매 입찰 주문 조회 API <br />
 - 특정 사이즈별  타입별 상품 판매/구매 입찰 주문 조회 API <br />
