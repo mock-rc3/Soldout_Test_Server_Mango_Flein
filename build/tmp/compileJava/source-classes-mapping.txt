@@ -74,6 +74,8 @@ com/example/demo/src/wish/WishService.java
  com.example.demo.src.wish.WishService
 com/example/demo/src/user/model/PostUserReq.java
  com.example.demo.src.user.model.PostUserReq
+com/example/demo/src/orderHistory/model/GetDealNumberRes.java
+ com.example.demo.src.orderHistory.model.GetDealNumberRes
 com/example/demo/src/user/model/GetFindIdRes.java
  com.example.demo.src.user.model.GetFindIdRes
 com/example/demo/src/wish/model/PostWishReq.java
@@ -104,6 +106,8 @@ com/example/demo/src/user/model/PostLoginReq.java
  com.example.demo.src.user.model.PostLoginReq
 com/example/demo/src/address/model/PostAddressReq.java
  com.example.demo.src.address.model.PostAddressReq
+com/example/demo/src/products/model/GetSizePrice.java
+ com.example.demo.src.products.model.GetSizePrice
 com/example/demo/src/products/model/GetSearchRes.java
  com.example.demo.src.products.model.GetSearchRes
 com/example/demo/src/user/UserController.java
