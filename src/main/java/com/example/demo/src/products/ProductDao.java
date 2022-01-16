@@ -265,8 +265,7 @@ public class ProductDao {
                 "LEFT JOIN SIZE S\n" +
                 "ON S.size_id = OH.size_id\n" +
                 "WHERE product_id = ? AND order_state = 1\n" +
-                "ORDER BY complete_time DESC\n" +
-                "LIMIT 5";
+                "ORDER BY complete_time DESC";
         int getProductIdParam = productId;
         return this.jdbcTemplate.query(getContentQuery,
                 (rs,rowNum) -> new GetRecentRes(
@@ -284,8 +283,7 @@ public class ProductDao {
                 "LEFT JOIN SIZE S\n" +
                 "ON S.size_id = OH.size_id\n" +
                 "WHERE product_id = ? AND order_state = 0 AND OH.type = ? \n" +
-                "ORDER BY complete_time DESC\n" +
-                "LIMIT 5";
+                "ORDER BY complete_time DESC";
 
         int getProductIdParam = productId;
         String getTypeParam = types;

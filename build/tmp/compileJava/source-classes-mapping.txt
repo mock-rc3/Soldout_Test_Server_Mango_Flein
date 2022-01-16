@@ -6,6 +6,8 @@ com/example/demo/src/notices/NoticeController.java
  com.example.demo.src.notices.NoticeController
 com/example/demo/config/Constant.java
  com.example.demo.config.Constant
+com/example/demo/src/products/model/GetRecentRes.java
+ com.example.demo.src.products.model.GetRecentRes
 com/example/demo/src/products/model/GetReleaseRes.java
  com.example.demo.src.products.model.GetReleaseRes
 com/example/demo/src/orderHistory/OrderHistoryService.java
@@ -42,12 +44,16 @@ com/example/demo/src/user/model/PostUserRes.java
  com.example.demo.src.user.model.PostUserRes
 com/example/demo/src/notices/NoticeService.java
  com.example.demo.src.notices.NoticeService
+com/example/demo/src/products/model/GetDealRes.java
+ com.example.demo.src.products.model.GetDealRes
 com/example/demo/config/BaseResponse.java
  com.example.demo.config.BaseResponse
 com/example/demo/src/products/ProductController.java
  com.example.demo.src.products.ProductController
 com/example/demo/src/wish/model/PostWishRes.java
  com.example.demo.src.wish.model.PostWishRes
+com/example/demo/src/products/model/GetInformationRes.java
+ com.example.demo.src.products.model.GetInformationRes
 com/example/demo/src/user/UserService.java
  com.example.demo.src.user.UserService
 com/example/demo/src/wish/WishProvider.java
@@ -76,6 +82,8 @@ com/example/demo/src/orderHistory/OrderHistoryController.java
  com.example.demo.src.orderHistory.OrderHistoryController
 com/example/demo/src/user/model/PostLoginRes.java
  com.example.demo.src.user.model.PostLoginRes
+com/example/demo/src/products/model/GetProductImageRes.java
+ com.example.demo.src.products.model.GetProductImageRes
 com/example/demo/src/user/UserDao.java
  com.example.demo.src.user.UserDao
 com/example/demo/utils/AES128.java
@@ -90,6 +98,8 @@ com/example/demo/src/orderHistory/OrderHistoryProvider.java
  com.example.demo.src.orderHistory.OrderHistoryProvider
 com/example/demo/src/test/TestController.java
  com.example.demo.src.test.TestController
+com/example/demo/src/products/model/GetTopInforRes.java
+ com.example.demo.src.products.model.GetTopInforRes
 com/example/demo/src/user/model/PostLoginReq.java
  com.example.demo.src.user.model.PostLoginReq
 com/example/demo/src/address/model/PostAddressReq.java
@@ -120,5 +130,7 @@ com/example/demo/src/magazine/MagazineDao.java
  com.example.demo.src.magazine.MagazineDao
 com/example/demo/src/user/UserProvider.java
  com.example.demo.src.user.UserProvider
+com/example/demo/src/products/model/GetRelateRecommendRes.java
+ com.example.demo.src.products.model.GetRelateRecommendRes
 com/example/demo/src/wish/model/GetWishRes.java
  com.example.demo.src.wish.model.GetWishRes
