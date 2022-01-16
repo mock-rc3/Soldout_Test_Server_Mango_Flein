@@ -57,11 +57,23 @@
 </div>
 </details>
 <details>
-<summary>22.01.13</summary>
+<summary>22.01.14</summary>
 <div markdown="1">       
 - 매거진 전체 조회 API <br />
 - 매거진 타입별 조회 API <br />
 - 매거진 상세 조회 API <br />
+- 서버 반영
+</div>
+</details>
+<details>
+<summary>22.01.15,6</summary>
+<div markdown="1">       
+- 타입별 상품 판매/구매 입찰 주문 조회 API <br />
+- 특정 사이즈별  타입별 상품 판매/구매 입찰 주문 조회 API <br />
+- 즉시 구매가/판매가 조회 API <br />
+- 특정 사이즈별 즉시 구매가/판매가 조회 API <br />
+- 즉시 구매 API <br />
+- 즉시 판매 API <br />
 - 서버 반영
 </div>
 </details>
