@@ -13,3 +13,4 @@ public class GetDealNumberRes {
     private int sell_bidding;
     private int sell_end;
 }
+
