@@ -296,6 +296,35 @@ public class ProductDao {
         );
     }
 
+    public List<GetSizePrice> getSizeTransPrice(int productId,String types){
+        String getContentQuery = "(SELECT O.product_id,O.order_id, 'ALL' AS size_name, MIN(hope_price) AS hope_price FROM SOLDOUT.ORDER_HISTORY O\n" +
+                "LEFT JOIN SIZE S\n" +
+                "ON S.size_id = O.size_id\n" +
+                "WHERE O.product_id = ? AND O.order_state = 0  AND O.type = ?)\n" +
+                "UNION\n" +
+                "SELECT * FROM(\n" +
+                "\t(SELECT    O.product_id,O.order_id,size_name, hope_price FROM SOLDOUT.ORDER_HISTORY O\n" +
+                "\tLEFT JOIN SIZE S\n" +
+                "\tON S.size_id = O.size_id\n" +
+                "\tWHERE O.product_id = ? AND O.order_state = 0\n" +
+                "    AND O.type = ?\n" +
+                "\tGROUP BY O.size_id\n" +
+                "\t) \n" +
+                "    ORDER BY O.size_id\n" +
+                ") AS SIZE";
+
+        int getProductIdParam = productId;
+        String getTypeParam = types;
+        return this.jdbcTemplate.query(getContentQuery,
+                (rs,rowNum) -> new GetSizePrice(
+                        rs.getInt("product_id"),
+                        rs.getInt("order_id"),
+                        rs.getString("size_name"),
+                        rs.getInt("hope_price")
+                ),getProductIdParam,getTypeParam,getProductIdParam,getTypeParam
+        );
+    }
+
     public List<GetProductImageRes> getDetailProductImage(int productId){
         String getContentQuery = "SELECT I.url FROM PRODUCT P\n" +
                 "LEFT JOIN IMAGE I\n" +
