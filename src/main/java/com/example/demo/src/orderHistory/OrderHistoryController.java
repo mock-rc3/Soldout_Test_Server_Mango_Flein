@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
@@ -33,6 +32,14 @@ public class OrderHistoryController {
         this.orderHistoryService = orderHistoryService;
         this.jwtService = jwtService;
     }
+
+    /**
+     * 구매, 판매 내역 갯수 조회 API
+     * [GET] /orderhistory/:userId/dealnumber
+     *
+     * @return BaseResponse<List < GetDealNumberRes>>
+     */
+
     @ResponseBody
     @GetMapping("/{userId}/dealnumber")
     public BaseResponse<List<GetDealNumberRes>> getDealNumber(@PathVariable("userId") int userId) {
@@ -45,6 +52,82 @@ public class OrderHistoryController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    /**
+     *  입찰 판매
+     * [POST] /orderhistory/selling
+     *
+     * @return BaseResponse<List < PostDealRes>>
+     */
+    @ResponseBody
+    @PostMapping("/selling")
+    public BaseResponse<PostDealRes> createDealSell(@RequestBody PostDealSellReq postDealSellReq) {
+        try{
+            PostDealRes postDealRes = orderHistoryService.createDealSell(postDealSellReq);
+            return new BaseResponse<>(postDealRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     *  입찰 구매
+     * [POST] /orderhistory/buy
+     *
+     * @return BaseResponse<List < PostDealRes>>
+     */
+    @ResponseBody
+    @PostMapping("/buy")
+    public BaseResponse<PostDealRes> createDealBuy(@RequestBody PostDealBuyReq postDealBuyReq) {
+        try{
+            PostDealRes postDealRes = orderHistoryService.createDealBuy(postDealBuyReq);
+            return new BaseResponse<>(postDealRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @ResponseBody
+    @PatchMapping("/{orderId}/delete")
+    public BaseResponse<String> modifyOrder(@PathVariable("orderId") int orderId) {
+
+        try {
+
+            PatchDeleteOrderReq patchDeleteOrderReq = new PatchDeleteOrderReq(orderId);
+            orderHistoryService.modifyOrder(patchDeleteOrderReq);
+            String result = "삭제 성공";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+
+    @ResponseBody
+    @GetMapping("/{userId}/{types}/deal")
+    public BaseResponse<List<GetDealDetailRes>> getDealDetail(@PathVariable("userId") int userId,@PathVariable("types") String types) {
+        try{
+            List<GetDealDetailRes> getDealDetailRes = orderHistoryProvider.getDealDetail(userId,types);
+            return new BaseResponse<>(getDealDetailRes);
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+
+    @ResponseBody
+    @GetMapping("/{userId}/{types}/complete")
+    public BaseResponse<List<GetDealDetailRes>> getDealComplete(@PathVariable("userId") int userId,@PathVariable("types") String types) {
+        try{
+            List<GetDealDetailRes> getDealDetailRes = orderHistoryProvider.getDealComplete(userId,types);
+            return new BaseResponse<>(getDealDetailRes);
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
     /**
      * 타입별 입찰 주문 조회 API
      * [GET] /orderhistory/:productId/:type

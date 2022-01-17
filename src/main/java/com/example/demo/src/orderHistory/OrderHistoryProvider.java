@@ -2,6 +2,7 @@ package com.example.demo.src.orderHistory;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.magazine.model.GetMagazineRes;
+import com.example.demo.src.orderHistory.model.GetDealDetailRes;
 import com.example.demo.src.orderHistory.model.GetDealNumberRes;
 import com.example.demo.src.orderHistory.model.GetOrderPriceRes;
 import com.example.demo.src.orderHistory.model.GetOrderRes;
@@ -37,6 +38,28 @@ public class OrderHistoryProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public List<GetDealDetailRes> getDealDetail(int user_id, String types) throws BaseException {
+        try {
+            List<GetDealDetailRes> getDealDetailRes = orderHistoryDao.getDealDetail(user_id, types);
+            return getDealDetailRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetDealDetailRes> getDealComplete(int user_id, String types) throws BaseException {
+        try {
+            List<GetDealDetailRes> getDealDetailRes = orderHistoryDao.getDealComplete(user_id, types);
+            return getDealDetailRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
+
+
     public List<GetOrderRes> getOrderByType(int product_id, int user_id, String type) throws BaseException {
        try {
             List<GetOrderRes> getOrderRes = orderHistoryDao.getOrderByType(product_id, user_id, type);

@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetRankRes {
+    private int product_id;
     private String url;
     private String product_name;
     private int price;

@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetReleaseRes {
+    private int product_id;
     private String product_name;
     private int price;
     private String url;
