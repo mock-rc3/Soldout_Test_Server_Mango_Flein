@@ -1,9 +1,7 @@
 package com.example.demo.src.orderHistory;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.orderHistory.model.PatchtradeBuyReq;
-import com.example.demo.src.orderHistory.model.PatchtradeSellingReq;
-import com.example.demo.src.user.model.PatchDeleteUserReq;
+import com.example.demo.src.orderHistory.model.*;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
-import static com.example.demo.config.BaseResponseStatus.FAIL_DELETE_USER;
 
 @Service
 public class OrderHistoryService {
@@ -30,6 +27,38 @@ public class OrderHistoryService {
         this.jwtService = jwtService;
 
     }
+
+    //POST
+    public PostDealRes createDealSell(PostDealSellReq postDealSellReq) throws BaseException {
+        try{
+            int userIdx = orderHistoryDao.createDealSell(postDealSellReq);
+            return new PostDealRes(userIdx);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    //POST
+    public PostDealRes createDealBuy(PostDealBuyReq postDealBuyReq) throws BaseException {
+        try{
+            int userIdx = orderHistoryDao.createDealBuy(postDealBuyReq);
+            return new PostDealRes(userIdx);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public void modifyOrder(PatchDeleteOrderReq patchDeleteOrderReq) throws BaseException {
+
+        try{
+            orderHistoryDao.modifyOrder(patchDeleteOrderReq);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
+
     public void tradeSelling(int trader_id, PatchtradeSellingReq patchtradeSellingReq) throws BaseException {
         try{
             int result = orderHistoryDao.tradeSelling(trader_id,patchtradeSellingReq);

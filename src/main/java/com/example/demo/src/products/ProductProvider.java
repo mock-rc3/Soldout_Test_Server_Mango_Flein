@@ -83,10 +83,10 @@ public class ProductProvider {
         }
     }
 
-    public List<GetSizePrice> getSizeTransPrice(int productId,String types) throws BaseException {
+    public List<GetSizePriceRes> getSizeTransPrice(int productId, String types) throws BaseException {
         try{
-            List<GetSizePrice> getSizePrice = productDao.getSizeTransPrice(productId,types);
-            return getSizePrice;
+            List<GetSizePriceRes> getSizePriceRes = productDao.getSizeTransPrice(productId,types);
+            return getSizePriceRes;
         }
         catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
@@ -158,6 +158,26 @@ public class ProductProvider {
         try{
             List<GetRankRes> getRankRes = productDao.getRankProduct();
             return getRankRes;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetDayAlarmRes> getDayAlarm() throws BaseException {
+        try{
+            List<GetDayAlarmRes> getDayAlarmRes = productDao.getDayAlarm();
+            return getDayAlarmRes;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetDayAlarmRes> getDayAlarmFilter(int userId) throws BaseException {
+        try{
+            List<GetDayAlarmRes> getDayAlarmRes = productDao.getDayAlarmFilter(userId);
+            return getDayAlarmRes;
         }
         catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);

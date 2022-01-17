@@ -22,7 +22,7 @@ public class ProductDao {
     }
 
     public List<GetNewRes> getNewProduct(){
-        String getContentQuery = "SELECT P.product_name, P.price,I.url,P.release_day FROM PRODUCT P\n" +
+        String getContentQuery = "SELECT P.product_id, P.product_name, P.price,I.url,P.release_day FROM PRODUCT P\n" +
                 "LEFT JOIN IMAGE I \n" +
                 "ON P.product_id = I.product_id\n" +
                 "WHERE category = 'sneakers' AND P.release_day < NOW()\n" +
@@ -30,6 +30,7 @@ public class ProductDao {
                 "ORDER BY P.release_day DESC";
         return this.jdbcTemplate.query(getContentQuery,
                 (rs,rowNum) -> new GetNewRes(
+                        rs.getInt("product_id"),
                         rs.getString("product_name"),
                         rs.getInt("price"),
                         rs.getString("url"),
@@ -38,8 +39,55 @@ public class ProductDao {
         );
     }
 
+    public List<GetDayAlarmRes> getDayAlarm(){
+        String getContentQuery = "SELECT date(P.release_day) as release_day,P.product_id,P.product_name,I.url,BI.img_url as brand_image, 'N' AS alarm_check FROM PRODUCT P\n" +
+                "LEFT JOIN IMAGE I \n" +
+                "ON P.product_id = I.product_id\n" +
+                "LEFT JOIN BRAND_IMAGE BI\n" +
+                "ON BI.brand_img_id = P.brand_img_id\n" +
+                "WHERE  release_day between CURDATE() - INTERVAL 30 DAY AND CURDATE() + INTERVAL 30 DAY\n" +
+                "GROUP BY product_name, release_day\n" +
+                "ORDER BY release_day desc";
+        return this.jdbcTemplate.query(getContentQuery,
+                (rs,rowNum) -> new GetDayAlarmRes(
+                        rs.getString("release_day"),
+                        rs.getInt("product_id"),
+                        rs.getString("product_name"),
+                        rs.getString("url"),
+                        rs.getString("brand_image"),
+                        rs.getString("alarm_check")
+                )
+        );
+    }
+
+    public List<GetDayAlarmRes> getDayAlarmFilter(int userId){
+        String getContentQuery = "SELECT date(P.release_day) as release_day,P.product_id,P.product_name,I.url,BI.img_url as brand_image, IF(nullif(N.product_id,0)>0,'Y','N') AS alarm_check   FROM PRODUCT P\n" +
+                "LEFT JOIN IMAGE I \n" +
+                "ON P.product_id = I.product_id\n" +
+                "LEFT JOIN BRAND_IMAGE BI\n" +
+                "ON BI.brand_img_id = P.brand_img_id\n" +
+                "LEFT JOIN (SELECT product_id FROM NOTICE \n" +
+                "WHERE user_id = ? ) AS N\n" +
+                "ON P.product_id = N.product_id\n" +
+                "WHERE  release_day between CURDATE() - INTERVAL 30 DAY AND CURDATE() + INTERVAL 30 DAY\n" +
+                "GROUP BY product_name, release_day\n" +
+                "ORDER BY release_day desc";
+        int getUserIdFilterParam = userId;
+        return this.jdbcTemplate.query(getContentQuery,
+                (rs,rowNum) -> new GetDayAlarmRes(
+                        rs.getString("release_day"),
+                        rs.getInt("product_id"),
+                        rs.getString("product_name"),
+                        rs.getString("url"),
+                        rs.getString("brand_image"),
+                        rs.getString("alarm_check")
+                ),getUserIdFilterParam
+        );
+    }
+
+
     public List<GetRankRes> getRankProduct(){
-        String getContentQuery = "SELECT I.url ,P.product_name, P.price FROM PRODUCT P\n" +
+        String getContentQuery = "SELECT P.product_id,I.url ,P.product_name, P.price FROM PRODUCT P\n" +
                 "LEFT JOIN IMAGE I \n" +
                 "ON P.product_id = I.product_id\n" +
                 "WHERE P.price != 0\n" +
@@ -48,6 +96,7 @@ public class ProductDao {
                 "LIMIT 30";
         return this.jdbcTemplate.query(getContentQuery,
                 (rs,rowNum) -> new GetRankRes(
+                        rs.getInt("product_id"),
                         rs.getString("url"),
                         rs.getString("product_name"),
                         rs.getInt("price")
@@ -168,7 +217,7 @@ public class ProductDao {
     }
 
     public List<GetRelateRecommendRes> getRelateRecommend( String brandName){
-        String getContentQuery = "SELECT I.url,BI.img_url  as brand_image  , P.product_name, OH.total_price \n" +
+        String getContentQuery = "SELECT P.product_id,I.url,BI.img_url  as brand_image  , P.product_name, OH.total_price \n" +
                 "FROM PRODUCT P \n" +
                 "LEFT JOIN IMAGE I  \n" +
                 "ON P.product_id = I.product_id \n" +
@@ -186,6 +235,7 @@ public class ProductDao {
         String getRelateBrandNameParam = brandName;
         return this.jdbcTemplate.query(getContentQuery,
                 (rs,rowNum) -> new GetRelateRecommendRes(
+                        rs.getInt("product_id"),
                         rs.getString("url"),
                         rs.getString("brand_image"),
                         rs.getString("product_name"),
@@ -296,8 +346,8 @@ public class ProductDao {
         );
     }
 
-    public List<GetSizePrice> getSizeTransPrice(int productId,String types){
-        String getContentQuery = "(SELECT O.product_id,O.order_id, 'ALL' AS size_name, MIN(hope_price) AS hope_price FROM SOLDOUT.ORDER_HISTORY O\n" +
+    public List<GetSizePriceRes> getSizeTransPrice(int productId, String types){
+        String getContentQuery = "(SELECT O.product_id,O.order_id,O.size_id, 'ALL' AS size_name, MIN(hope_price) AS hope_price FROM SOLDOUT.ORDER_HISTORY O\n" +
                 "LEFT JOIN SIZE S\n" +
                 "ON S.size_id = O.size_id\n" +
                 "WHERE O.product_id = ? AND O.order_state = 0  AND O.type = ?)\n" +
@@ -316,9 +366,10 @@ public class ProductDao {
         int getProductIdParam = productId;
         String getTypeParam = types;
         return this.jdbcTemplate.query(getContentQuery,
-                (rs,rowNum) -> new GetSizePrice(
+                (rs,rowNum) -> new GetSizePriceRes(
                         rs.getInt("product_id"),
                         rs.getInt("order_id"),
+                        rs.getInt("size_id"),
                         rs.getString("size_name"),
                         rs.getInt("hope_price")
                 ),getProductIdParam,getTypeParam,getProductIdParam,getTypeParam
@@ -366,7 +417,7 @@ public class ProductDao {
 
 
     public List<GetRankRes> getRankProductFilter(String category){
-        String getContentQuery = "SELECT I.url ,P.product_name, P.price FROM PRODUCT P\n" +
+        String getContentQuery = "SELECT  P.product_id, I.url ,P.product_name, P.price FROM PRODUCT P\n" +
                 "LEFT JOIN IMAGE I \n" +
                 "ON P.product_id = I.product_id\n" +
                 "WHERE P.price != 0\n" +
@@ -377,6 +428,7 @@ public class ProductDao {
         String getRankFilterParam = category;
         return this.jdbcTemplate.query(getContentQuery,
                 (rs,rowNum) -> new GetRankRes(
+                        rs.getInt("product_id"),
                         rs.getString("url"),
                         rs.getString("product_name"),
                         rs.getInt("price")
@@ -384,7 +436,7 @@ public class ProductDao {
         );
     }
     public List<GetReleaseRes> getReleaseProduct(){
-        String getContentQuery = "SELECT P.product_name,P.release_day, P.price,I.url FROM PRODUCT P\n" +
+        String getContentQuery = "SELECT  P.product_id,P.product_name,P.release_day, P.price,I.url FROM PRODUCT P\n" +
                 "LEFT JOIN IMAGE I \n" +
                 "ON P.product_id = I.product_id\n" +
                 "WHERE category = 'sneakers' AND P.release_day > NOW()\n" +
@@ -392,6 +444,7 @@ public class ProductDao {
                 "ORDER BY P.release_day ASC";
         return this.jdbcTemplate.query(getContentQuery,
                 (rs,rowNum) -> new GetReleaseRes(
+                        rs.getInt("product_id"),
                         rs.getString("product_name"),
                         rs.getInt("price"),
                         rs.getString("url"),
