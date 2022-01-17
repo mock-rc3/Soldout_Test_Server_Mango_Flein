@@ -22,11 +22,11 @@ public class WishProvider {
     }
 
     public List<GetWishRes> getWish(int userId) throws BaseException {
-        try {
+      // try {
             List<GetWishRes> getWishRes = wishDao.getWish(userId);
             return getWishRes;
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
+       // } catch (Exception exception) {
+        //    throw new BaseException(DATABASE_ERROR);
+        //}
     }
 }

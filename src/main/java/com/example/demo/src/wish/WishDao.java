@@ -20,13 +20,13 @@ public class WishDao {
     }
 
     public List<GetWishRes> getWish(int userId){
-        String getWishQuery = "select P.product_name, P.color, P.brand, P.price, S.size_name from FAVORITE F join PRODUCT P  on P.product_id = F.product_id join SIZE S on S.size_id = F.size_id where F.user_id = ? and F.status = 1";
+        String getWishQuery = "select P.product_name, P.color, B.img_url, P.price, S.size_name from FAVORITE F join PRODUCT P  on P.product_id = F.product_id join SIZE S on S.size_id = F.size_id join BRAND_IMAGE B on B.brand_img_id = P.brand_img_id where F.user_id = ? and F.status = 1";
         int getWishParams = userId;
         return this.jdbcTemplate.query(getWishQuery,
                 (rs,rowNum) ->new GetWishRes(
                         rs.getString("product_name"),
                         rs.getString("color"),
-                        rs.getString("brand"),
+                        rs.getString("img_url"),
                         rs.getInt("price"),
                         rs.getString("size_name")
                         ), getWishParams

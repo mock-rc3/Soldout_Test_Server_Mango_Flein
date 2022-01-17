@@ -10,7 +10,7 @@ import lombok.Setter;
 public class GetWishRes {
     private String product_name;
     private String color;
-    private String brand;
+    private String img_url;
     private int price;
     private String size_name;
 }
