@@ -41,10 +41,11 @@ public class WishController {
      *  @return BaseResponse<List<GetWishRes>>
      */
     @ResponseBody
-    @GetMapping("/{userId}")
-    public BaseResponse<List<GetWishRes>> getWish(@PathVariable("userId") int userId){
+    @GetMapping("")
+    public BaseResponse<List<GetWishRes>> getWish(){
         try {
-            List<GetWishRes> getWishRes = wishProvider.getWish(userId);
+            int userIdByJwt = jwtService.getUserId();
+            List<GetWishRes> getWishRes = wishProvider.getWish(userIdByJwt);
             return new BaseResponse<>(getWishRes);
         }catch (BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
