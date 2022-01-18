@@ -1,6 +1,8 @@
 package com.example.demo.src.products;
 
 import com.example.demo.src.products.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -11,10 +13,7 @@ import java.util.List;
 @Repository
 public class ProductDao {
     private JdbcTemplate jdbcTemplate;
-    private GetTopInforRes getTopInforRes;
-    private List<GetRecentRes> getRecentRes;
-    private List<GetDealRes> getDealRes;
-    private List<GetInformationRes> getInformationRes;
+    final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public void setDataSource(DataSource dataSource){
@@ -100,6 +99,131 @@ public class ProductDao {
                         rs.getString("url"),
                         rs.getString("product_name"),
                         rs.getInt("price")
+                )
+        );
+    }
+
+
+    public List<GetGoodsRes> getGoodsList(){
+        String getContentQuery = "SELECT P.product_id, I.url , P.product_name,\n" +
+                "(\n" +
+                "\tSELECT total_price FROM ORDER_HISTORY OH\n" +
+                "\tWHERE OH.product_id = P.product_id AND order_state = 1\n" +
+                "\tORDER BY complete_time DESC LIMIT 1\n" +
+                ")AS max_count,\n" +
+                "(select ROUND(((a.max_count-a.pre_max_count)/a.pre_max_count)*100,1) as percent\n" +
+                "from \n" +
+                "(\n" +
+                "    select \n" +
+                "\t\t(\n" +
+                "\t\t\tSELECT total_price FROM ORDER_HISTORY OH\n" +
+                "\t\tWHERE  OH.product_id = P.product_id AND order_state = 1\n" +
+                "\t\tORDER BY complete_time DESC LIMIT 1\n" +
+                "\t\t)AS max_count,\n" +
+                "\t\t(\n" +
+                "\t\t\t\n" +
+                "\t\t\tSELECT total_price FROM ORDER_HISTORY OH\n" +
+                "\t\t\tWHERE  OH.product_id = P.product_id AND order_state = 1\n" +
+                "\t\t\tORDER BY complete_time DESC LIMIT 1,1\n" +
+                "\t\t)AS pre_max_count\n" +
+                ")as  a) as percent\n" +
+                "FROM PRODUCT P \n" +
+                "LEFT JOIN IMAGE I  \n" +
+                "ON P.product_id = I.product_id \n" +
+                "GROUP BY product_name \n" +
+                "HAVING  max_count IS NOT NULL";
+        return this.jdbcTemplate.query(getContentQuery,
+                (rs,rowNum) -> new GetGoodsRes(
+                        rs.getInt("product_id"),
+                        rs.getString("url"),
+                        rs.getString("product_name"),
+                        rs.getInt("max_count"),
+                        rs.getInt("percent")
+                )
+        );
+    }
+
+    public List<GetGoodsRes> getGoodsListFilter(String search){
+        String getContentQuery = "SELECT P.product_id, I.url , P.product_name,\n" +
+                "(\n" +
+                "\tSELECT total_price FROM ORDER_HISTORY OH\n" +
+                "\tWHERE OH.product_id = P.product_id AND order_state = 1\n" +
+                "\tORDER BY complete_time DESC LIMIT 1\n" +
+                ")AS max_count,\n" +
+                "(select ROUND(((a.max_count-a.pre_max_count)/a.pre_max_count)*100,1) as percent\n" +
+                "from \n" +
+                "(\n" +
+                "    select \n" +
+                "\t\t(\n" +
+                "\t\t\tSELECT total_price FROM ORDER_HISTORY OH\n" +
+                "\t\tWHERE  OH.product_id = P.product_id AND order_state = 1\n" +
+                "\t\tORDER BY complete_time DESC LIMIT 1\n" +
+                "\t\t)AS max_count,\n" +
+                "\t\t(\n" +
+                "\t\t\t\n" +
+                "\t\t\tSELECT total_price FROM ORDER_HISTORY OH\n" +
+                "\t\t\tWHERE  OH.product_id = P.product_id AND order_state = 1\n" +
+                "\t\t\tORDER BY complete_time DESC LIMIT 1,1\n" +
+                "\t\t)AS pre_max_count\n" +
+                ")as  a) as percent\n" +
+                "FROM PRODUCT P \n" +
+                "LEFT JOIN IMAGE I  \n" +
+                "ON P.product_id = I.product_id \n" +
+                "GROUP BY product_name \n" +
+                "HAVING  product_name regexp ? \n" +
+                "LIMIT 5";
+        String getSearchFilterParam = search;
+        return this.jdbcTemplate.query(getContentQuery,
+                (rs,rowNum) -> new GetGoodsRes(
+                        rs.getInt("product_id"),
+                        rs.getString("url"),
+                        rs.getString("product_name"),
+                        rs.getInt("max_count"),
+                        rs.getInt("percent")
+                ),getSearchFilterParam
+        );
+    }
+
+
+    public List<GetGoodsRes> getNewSellList(){
+        String getContentQuery = "SELECT P.product_id, I.url , P.product_name,\n" +
+                "(\n" +
+                "\tSELECT hope_price FROM ORDER_HISTORY OH\n" +
+                "\tWHERE OH.product_id = P.product_id AND order_state = 0\n" +
+                "    AND type = 'sell'\n" +
+                "\tORDER BY created_at DESC LIMIT 1\n" +
+                ")AS max_count,\n" +
+                "(select ROUND(((a.max_count-a.pre_max_count)/a.pre_max_count)*100,1) as percent\n" +
+                "from \n" +
+                "(\n" +
+                "    select \n" +
+                "\t\t(\n" +
+                "\t\t\tSELECT hope_price FROM ORDER_HISTORY OH\n" +
+                "\t\t\tWHERE OH.product_id = P.product_id AND order_state = 0\n" +
+                "\t\t\tAND type = 'sell'\n" +
+                "\t\t\tORDER BY created_at DESC LIMIT 1\n" +
+                "\t\t)AS max_count,\n" +
+                "\t\t(\n" +
+                "\t\t\t\n" +
+                "\t\t\tSELECT hope_price FROM ORDER_HISTORY OH\n" +
+                "\t\t\tWHERE OH.product_id = P.product_id AND order_state = 0\n" +
+                "\t\t\tAND type = 'sell'\n" +
+                "\t\t\tORDER BY created_at DESC LIMIT 1,1\n" +
+                "\t\t)AS pre_max_count\n" +
+                ")as  a) as percent\n" +
+                "FROM PRODUCT P \n" +
+                "LEFT JOIN IMAGE I  \n" +
+                "ON P.product_id = I.product_id \n" +
+                "GROUP BY product_name \n" +
+                "HAVING max_count IS NOT NULL\n" +
+                "\n";
+        return this.jdbcTemplate.query(getContentQuery,
+                (rs,rowNum) -> new GetGoodsRes(
+                        rs.getInt("product_id"),
+                        rs.getString("url"),
+                        rs.getString("product_name"),
+                        rs.getInt("max_count"),
+                        rs.getInt("percent")
                 )
         );
     }
@@ -269,7 +393,7 @@ public class ProductDao {
                 "\t\t\tORDER BY complete_time DESC LIMIT 1,1\n" +
                 "\t\t)AS pre_max_count\n" +
                 ")as  a) as diff_count,\n" +
-                "(select ((a.max_count-a.pre_max_count)/a.pre_max_count)*100 as percent\n" +
+                "(select round(((a.max_count-a.pre_max_count)/a.pre_max_count)*100,1) as percent\n" +
                 "from \n" +
                 "(\n" +
                 "    select \n" +
@@ -347,22 +471,21 @@ public class ProductDao {
     }
 
     public List<GetSizePriceRes> getSizeTransPrice(int productId, String types){
-        String getContentQuery = "(SELECT O.product_id,O.order_id,O.size_id, 'ALL' AS size_name, MIN(hope_price) AS hope_price FROM SOLDOUT.ORDER_HISTORY O\n" +
+        String getContentQuery = " (SELECT O.product_id,O.order_id,O.size_id, 'ALL' AS size_name, MIN(hope_price) AS hope_price FROM SOLDOUT.ORDER_HISTORY O\n" +
                 "LEFT JOIN SIZE S\n" +
                 "ON S.size_id = O.size_id\n" +
                 "WHERE O.product_id = ? AND O.order_state = 0  AND O.type = ?)\n" +
                 "UNION\n" +
-                "SELECT * FROM(\n" +
-                "\t(SELECT    O.product_id,O.order_id,size_name, hope_price FROM SOLDOUT.ORDER_HISTORY O\n" +
-                "\tLEFT JOIN SIZE S\n" +
-                "\tON S.size_id = O.size_id\n" +
-                "\tWHERE O.product_id = ? AND O.order_state = 0\n" +
-                "    AND O.type = ?\n" +
-                "\tGROUP BY O.size_id\n" +
-                "\t) \n" +
+                "SELECT S.product_id, S.order_id,S.size_id, S.size_name, S.hope_price FROM(\n" +
+                "        (SELECT    O.product_id,O.order_id,O.size_id,S.size_name, O.hope_price FROM SOLDOUT.ORDER_HISTORY O\n" +
+                "        LEFT JOIN SIZE S\n" +
+                "        ON S.size_id = O.size_id\n" +
+                "        WHERE O.product_id = ? AND O.order_state = 0\n" +
+                "\t\tAND O.type = ?\n" +
+                "        GROUP BY O.size_id\n" +
+                "        )\n" +
                 "    ORDER BY O.size_id\n" +
-                ") AS SIZE";
-
+                ") AS S\n";
         int getProductIdParam = productId;
         String getTypeParam = types;
         return this.jdbcTemplate.query(getContentQuery,
