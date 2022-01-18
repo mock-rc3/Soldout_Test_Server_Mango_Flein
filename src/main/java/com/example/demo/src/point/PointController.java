@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.example.demo.config.BaseResponseStatus.INVALID_USER_JWT;
+
 @RestController
 @RequestMapping("/points")
 public class PointController {
@@ -30,14 +32,17 @@ public class PointController {
 
     /**
      *  포인트 내역 조회 API
-     *  [GET] /points
+     *  [GET] /points/:userId
      *  @return BaseResponse<List<>>
      */
     @ResponseBody
-    @GetMapping("/history")
-    public BaseResponse<List<GetPointHistoryRes>> getPontHistory(){
+    @GetMapping("/history/{userId}")
+    public BaseResponse<List<GetPointHistoryRes>> getPontHistory(@PathVariable("userId") int userId){
         try {
             int user_id = jwtService.getUserId();
+            if (userId != user_id) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             List<GetPointHistoryRes> getPointHistoryRes = pointProvider.getPontHistory(user_id);
             return new BaseResponse<>(getPointHistoryRes);
         }catch (BaseException exception){
@@ -46,14 +51,17 @@ public class PointController {
     }
     /**
      *  타입별 포인트 내역 조회 API
-     *  [GET] /points/:type
+     *  [GET] /points/:userId/:type
      *  @return BaseResponse<List<>>
      */
     @ResponseBody
-    @GetMapping("/history/{type}")
-    public BaseResponse<List<GetPointHistoryRes>> getPontHistoryByType(@PathVariable("type") String type){
+    @GetMapping("/history/{userId}/{type}")
+    public BaseResponse<List<GetPointHistoryRes>> getPontHistoryByType(@PathVariable("userId") int userId, @PathVariable("type") String type){
         try {
             int user_id = jwtService.getUserId();
+            if (userId != user_id) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             if(type.equals("취소")){
                 List<GetPointHistoryRes> getPointHistoryRes = pointProvider.getCancelPontHistory(user_id);
                 return new BaseResponse<>(getPointHistoryRes);
@@ -66,14 +74,17 @@ public class PointController {
     }
     /**
      *  포인트 내역 조회 API
-     *  [GET] /points
+     *  [GET] /points/:userId
      *  @return BaseResponse<>
      */
     @ResponseBody
-    @GetMapping("")
-    public BaseResponse<GetPointRes> getPontHistoryByType(){
+    @GetMapping("/{userId}")
+    public BaseResponse<GetPointRes> getPontHistoryByType(@PathVariable("userId") int userId){
         try {
             int user_id = jwtService.getUserId();
+            if (userId != user_id) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             GetPointRes getPointHistoryRes = pointProvider.getPoint(user_id);
             return new BaseResponse<>(getPointHistoryRes);
         }catch (BaseException exception){

@@ -42,6 +42,8 @@ com/example/demo/src/magazine/MagazineController.java
  com.example.demo.src.magazine.MagazineController
 com/example/demo/src/magazine/model/GetMagazineDetailRes.java
  com.example.demo.src.magazine.model.GetMagazineDetailRes
+com/example/demo/src/orderHistory/model/GetTradePriceRes.java
+ com.example.demo.src.orderHistory.model.GetTradePriceRes
 com/example/demo/src/products/ProductDao.java
  com.example.demo.src.products.ProductDao
 com/example/demo/src/orderHistory/model/GetDealDetailRes.java
@@ -66,6 +68,8 @@ com/example/demo/config/BaseResponse.java
  com.example.demo.config.BaseResponse
 com/example/demo/src/products/ProductController.java
  com.example.demo.src.products.ProductController
+com/example/demo/src/wish/model/GetSizeRes.java
+ com.example.demo.src.wish.model.GetSizeRes
 com/example/demo/src/wish/model/PostWishRes.java
  com.example.demo.src.wish.model.PostWishRes
 com/example/demo/src/products/model/GetInformationRes.java
@@ -170,6 +174,8 @@ com/example/demo/DemoApplication.java
  com.example.demo.DemoApplication
 com/example/demo/utils/JwtService.java
  com.example.demo.utils.JwtService
+com/example/demo/src/user/model/PatchPasswordReq.java
+ com.example.demo.src.user.model.PatchPasswordReq
 com/example/demo/src/magazine/MagazineDao.java
  com.example.demo.src.magazine.MagazineDao
 com/example/demo/src/user/UserProvider.java

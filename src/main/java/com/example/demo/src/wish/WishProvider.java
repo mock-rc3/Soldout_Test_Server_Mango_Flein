@@ -1,6 +1,7 @@
 package com.example.demo.src.wish;
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.wish.model.GetSizeRes;
 import com.example.demo.src.wish.model.GetWishRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

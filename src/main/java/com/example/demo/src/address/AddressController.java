@@ -44,6 +44,10 @@ public class AddressController {
     @GetMapping("/{userId}")
     public BaseResponse<List<GetAddressRes>> getCustomerAddress(@PathVariable("userId") int userId){
         try {
+            int userIdByJwt = jwtService.getUserId();
+            if (userId != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             List<GetAddressRes> getAddressRes = addressProvider.getAddress(userId);
             return new BaseResponse<>(getAddressRes);
         }catch (BaseException exception){
@@ -52,15 +56,18 @@ public class AddressController {
     }
 
     /**
-     * 주소 생성 /address
+     * 주소 생성 /address/:userId
      * @param postAddressReq
      * @return
      */
     @ResponseBody
-    @PostMapping("")
-    public BaseResponse<PostAddressRes> createAddress(@RequestBody PostAddressReq postAddressReq) {
+    @PostMapping("/{userId}")
+    public BaseResponse<PostAddressRes> createAddress(@PathVariable("userId") int userId, @RequestBody PostAddressReq postAddressReq) {
         try {
             int userIdByJwt = jwtService.getUserId();
+            if (userId != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             PostAddressRes postAddressRes = addressService.createAddress(userIdByJwt,postAddressReq);
             return new BaseResponse<>(postAddressRes);
         } catch (BaseException exception) {

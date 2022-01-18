@@ -278,7 +278,29 @@ public class OrderHistoryDao {
 
         return this.jdbcTemplate.update(deleteQuery,deleteParams);
     }
-
-
+    public List<GetTradePriceRes> getTradePrice(int product_id){
+        String getTradePriceQuery = "select O.order_id, S.size_name, O.complete_time, TIMESTAMPDIFF(day, O.complete_time, now()) as time_diff, O.total_price from ORDER_HISTORY O JOIN SIZE S on O.size_id = S.size_id where O.order_state=1 and O.product_id = ? order by time_diff";
+        int getTradePriceParams = product_id;
+        return this.jdbcTemplate.query(getTradePriceQuery,
+                (rs, rowNum) -> new GetTradePriceRes(
+                        rs.getInt("order_id"),
+                        rs.getString("size_name"),
+                        rs.getTimestamp("complete_time"),
+                        rs.getInt("time_diff"),
+                        rs.getInt("total_price")),
+                getTradePriceParams);
+    }
+    public List<GetTradePriceRes> getTradePriceBySize(int product_id, int size_id){
+        String getTradePriceQuery = "select O.order_id, S.size_name, O.complete_time, TIMESTAMPDIFF(day, O.complete_time, now()) as time_diff, O.total_price from ORDER_HISTORY O JOIN SIZE S on O.size_id = S.size_id where O.order_state=1 and O.product_id = ? and O.size_id = ? order by time_diff";
+        Object[] getTradePriceParams = new Object[]{product_id, size_id};
+        return this.jdbcTemplate.query(getTradePriceQuery,
+                (rs, rowNum) -> new GetTradePriceRes(
+                        rs.getInt("order_id"),
+                        rs.getString("size_name"),
+                        rs.getTimestamp("complete_time"),
+                        rs.getInt("time_diff"),
+                        rs.getInt("total_price")),
+                getTradePriceParams);
+    }
 
 }
