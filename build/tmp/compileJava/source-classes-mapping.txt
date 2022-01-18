@@ -28,12 +28,16 @@ com/example/demo/src/notices/NoticeProvider.java
  com.example.demo.src.notices.NoticeProvider
 com/example/demo/src/wish/WishDao.java
  com.example.demo.src.wish.WishDao
+com/example/demo/src/point/model/GetPointHistoryRes.java
+ com.example.demo.src.point.model.GetPointHistoryRes
 com/example/demo/src/orderHistory/model/OrderHistory.java
  com.example.demo.src.orderHistory.model.OrderHistory
 com/example/demo/src/orderHistory/OrderHistoryDao.java
  com.example.demo.src.orderHistory.OrderHistoryDao
 com/example/demo/src/user/model/PatchDeleteUserReq.java
  com.example.demo.src.user.model.PatchDeleteUserReq
+com/example/demo/src/point/PointController.java
+ com.example.demo.src.point.PointController
 com/example/demo/src/magazine/MagazineController.java
  com.example.demo.src.magazine.MagazineController
 com/example/demo/src/magazine/model/GetMagazineDetailRes.java
@@ -42,6 +46,8 @@ com/example/demo/src/products/ProductDao.java
  com.example.demo.src.products.ProductDao
 com/example/demo/src/orderHistory/model/GetDealDetailRes.java
  com.example.demo.src.orderHistory.model.GetDealDetailRes
+com/example/demo/src/point/PointDao.java
+ com.example.demo.src.point.PointDao
 com/example/demo/config/secret/Secret.java
  com.example.demo.config.secret.Secret
 com/example/demo/src/address/AddressProvider.java
@@ -64,6 +70,8 @@ com/example/demo/src/wish/model/PostWishRes.java
  com.example.demo.src.wish.model.PostWishRes
 com/example/demo/src/products/model/GetInformationRes.java
  com.example.demo.src.products.model.GetInformationRes
+com/example/demo/src/point/model/GetPointRes.java
+ com.example.demo.src.point.model.GetPointRes
 com/example/demo/src/user/UserService.java
  com.example.demo.src.user.UserService
 com/example/demo/src/orderHistory/model/PostDealSellReq.java
@@ -100,6 +108,8 @@ com/example/demo/src/products/model/GetDayAlarmRes.java
  com.example.demo.src.products.model.GetDayAlarmRes
 com/example/demo/src/orderHistory/model/GetOrderRes.java
  com.example.demo.src.orderHistory.model.GetOrderRes
+com/example/demo/src/point/PointProvider.java
+ com.example.demo.src.point.PointProvider
 com/example/demo/src/orderHistory/OrderHistoryController.java
  com.example.demo.src.orderHistory.OrderHistoryController
 com/example/demo/src/user/model/PostLoginRes.java
