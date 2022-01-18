@@ -1,8 +1,6 @@
 package com.example.demo.src.orderHistory;
 
 import com.example.demo.src.orderHistory.model.*;
-import com.example.demo.src.user.model.GetUserRes;
-import com.example.demo.src.user.model.PostUserReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -49,6 +47,81 @@ public class OrderHistoryDao {
                 ),getSearchFilterParam,getSearchFilterParam,getSearchFilterParam,getSearchFilterParam
         );
     }
+    //구매,판매 입찰 내역 상세 조회
+    public List<GetDealDetailRes>  getDealDetail(int user_id, String types){
+        String getOrderDealQuery = "SELECT O.order_id,PR.product_id,S.size_name , PR.url, PR.brand_image,PR.product_name,O.hope_price  FROM ORDER_HISTORY O\n" +
+                "LEFT JOIN (SELECT P.product_id,I.url,BI.img_url  as brand_image  , P.product_name, OH.total_price \n" +
+                "FROM PRODUCT P \n" +
+                "LEFT JOIN IMAGE I  \n" +
+                "ON P.product_id = I.product_id \n" +
+                "LEFT JOIN BRAND_IMAGE BI \n" +
+                "ON BI.brand_img_id = P.brand_img_id \n" +
+                "LEFT JOIN  ( \n" +
+                "SELECT * FROM ORDER_HISTORY  WHERE order_state = 1   AND complete_time \n" +
+                "IN (  SELECT MAX(complete_time) FROM ORDER_HISTORY group by complete_time )\n" +
+                "GROUP BY product_id \n" +
+                ") OH\n" +
+                " ON OH.product_id = P.product_id\n" +
+                " GROUP BY product_name ) AS PR\n" +
+                "ON PR.product_id = O.product_id\n" +
+                "LEFT JOIN SIZE S\n" +
+                "ON S.size_id = O.size_id\n" +
+                "WHERE O.user_id = ? AND O.order_state = 0\n" +
+                "AND O.type = ? AND O.status = 1\n" +
+                "ORDER BY O.created_at DESC";
+        Object[] getOrderDealParams = new Object[]{user_id,types};
+        return this.jdbcTemplate.query(getOrderDealQuery,
+                (rs, rowNum) -> new GetDealDetailRes(
+                        rs.getInt("order_id"),
+                        rs.getInt("product_id"),
+                        rs.getString("size_name"),
+                        rs.getString("url"),
+                        rs.getString("brand_image"),
+                        rs.getString("product_name"),
+                        rs.getInt("hope_price")
+                        ),
+                getOrderDealParams);
+    }
+    //구매,판매 완료 내역 상세 조회
+    public List<GetDealDetailRes>  getDealComplete(int user_id, String types){
+        String getOrderDealQuery = "SELECT O.order_id,PR.product_id,S.size_name , PR.url, PR.brand_image,PR.product_name,O.total_price  FROM ORDER_HISTORY O\n" +
+                "LEFT JOIN (SELECT P.product_id,I.url,BI.img_url  as brand_image  , P.product_name, OH.total_price \n" +
+                "FROM PRODUCT P \n" +
+                "LEFT JOIN IMAGE I  \n" +
+                "ON P.product_id = I.product_id \n" +
+                "LEFT JOIN BRAND_IMAGE BI \n" +
+                "ON BI.brand_img_id = P.brand_img_id \n" +
+                "LEFT JOIN  ( \n" +
+                "SELECT * FROM ORDER_HISTORY  WHERE order_state = 1   AND complete_time \n" +
+                "IN (  SELECT MAX(complete_time) FROM ORDER_HISTORY group by complete_time )\n" +
+                "GROUP BY product_id \n" +
+                ") OH\n" +
+                " ON OH.product_id = P.product_id\n" +
+                " GROUP BY product_name ) AS PR\n" +
+                "ON PR.product_id = O.product_id\n" +
+                "LEFT JOIN SIZE S\n" +
+                "ON S.size_id = O.size_id\n" +
+                "WHERE O.user_id = ? AND O.order_state = 1\n" +
+                "AND O.type = ? AND O.status = 1\n" +
+                "ORDER BY O.created_at DESC";
+        Object[] getOrderDealParams = new Object[]{user_id,types};
+        return this.jdbcTemplate.query(getOrderDealQuery,
+                (rs, rowNum) -> new GetDealDetailRes(
+                        rs.getInt("order_id"),
+                        rs.getInt("product_id"),
+                        rs.getString("size_name"),
+                        rs.getString("url"),
+                        rs.getString("brand_image"),
+                        rs.getString("product_name"),
+                        rs.getInt("total_price")
+                ),
+                getOrderDealParams);
+    }
+
+
+
+
+
     //타입별 입찰 주문 내역 조회
     public List<GetOrderRes> getOrderByType(int product_id, int user_id, String type){
         String getOrderQuery = "SELECT O.order_id, S.size_name, O.hope_price, O.type, COUNT(S.size_name) AS quantity from ORDER_HISTORY O JOIN SIZE S on S.size_id = O.size_id WHERE O.product_id = ? AND O.user_id not in (?) AND O.type = ? AND O.status=1 AND O.order_state=0 AND DATE(NOW()) >= DATE_SUB(O.created_at, INTERVAL O.term DAY) GROUP BY S.size_name, O.hope_price order by (case when O.type = 'buy' then O.hope_price end )desc";
@@ -182,7 +255,30 @@ public class OrderHistoryDao {
          this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
     }
 
+    public int createDealSell(PostDealSellReq postDealSellReq){
+        String createUserQuery = "INSERT INTO ORDER_HISTORY(user_id, product_id, size_id, type,point, hope_price , term, return_address, account)\n" +
+                "VALUES (?,?,?,'sell',?,?,?,?,?)";
+        Object[] createUserParams = new Object[]{postDealSellReq.getUser_id(), postDealSellReq.getProduct_id(), postDealSellReq.getSize_id(), postDealSellReq.getPoint(), postDealSellReq.getHope_price(), postDealSellReq.getTerm(), postDealSellReq.getReturn_address(), postDealSellReq.getAccount()};
+        this.jdbcTemplate.update(createUserQuery, createUserParams);
 
+        String lastInserIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInserIdQuery,int.class);
+    }
 
+    public int createDealBuy(PostDealBuyReq postDealBuyReq){
+        String createUserQuery = "INSERT INTO ORDER_HISTORY(user_id, product_id, size_id, type,point, hope_price , term, address)\n" +
+                "VALUES (?,?,?,'buy',?,?,?,?)";
+        Object[] createUserParams = new Object[]{postDealBuyReq.getUser_id(), postDealBuyReq.getProduct_id(), postDealBuyReq.getSize_id(), postDealBuyReq.getPoint(), postDealBuyReq.getHope_price(), postDealBuyReq.getTerm(), postDealBuyReq.getAddress()};
+        this.jdbcTemplate.update(createUserQuery, createUserParams);
 
+        String lastInserIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInserIdQuery,int.class);
+    }
+
+    public int modifyOrder(PatchDeleteOrderReq patchDeleteOrderReq){
+        String deleteQuery = "UPDATE ORDER_HISTORY SET status = 0 WHERE order_id = ? ";
+        Object[] deleteParams = new Object[]{ patchDeleteOrderReq.getId()};
+
+        return this.jdbcTemplate.update(deleteQuery,deleteParams);
+    }
 }

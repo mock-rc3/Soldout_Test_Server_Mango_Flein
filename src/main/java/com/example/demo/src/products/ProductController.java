@@ -30,6 +30,13 @@ public class  ProductController {
         this.productService = productService;
         this.jwtService = jwtService;
     }
+
+    /**
+     * 신규 발매 상품 조회 API
+     * [GET] /products/new
+     *
+     * @return BaseResponse<List < GetNewRes>>
+     */
     @ResponseBody
     @GetMapping("/new")
     public BaseResponse<List<GetNewRes>> getNewProduct() {
@@ -42,6 +49,12 @@ public class  ProductController {
         }
     }
 
+    /**
+     * 상품 랭킹 조회 API
+     * [GET] /products/rank
+     *
+     * @return BaseResponse<List < GetRankRes>>
+     */
     @ResponseBody
     @GetMapping("/rank")
     public BaseResponse<List<GetRankRes>> getRankProduct(@RequestParam(value="category",required=false) String category) {
@@ -60,6 +73,37 @@ public class  ProductController {
         }
     }
 
+    /**
+     * 날짜별 발매 상품 API
+     * [GET] /products/day
+     * 날짜별 발매 상품 API (로그인 한경우)
+     * [GET] /products/day/:userId
+     *
+     * @return BaseResponse<List < GetDayAlarmRes>>
+     */
+    @ResponseBody
+    @GetMapping("/day")
+    public BaseResponse<List<GetDayAlarmRes>> getDayAlarm(@RequestParam(value="userId",required=false,defaultValue = "0") int userId ) {
+        try{
+            if(userId == 0){
+                List<GetDayAlarmRes> getDayAlarmRes = productprovider.getDayAlarm();
+                return new BaseResponse<>(getDayAlarmRes);
+            }else{
+                List<GetDayAlarmRes> getDayAlarmRes = productprovider.getDayAlarmFilter(userId);
+                return new BaseResponse<>(getDayAlarmRes);
+            }
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 연관 추천 상품 조회 API
+     * [GET] /products/brand/:brandName
+     *
+     * @return BaseResponse<List<GetRelateRecommendRes>>
+     */
     @ResponseBody
     @GetMapping("/brand/{brandName}")
     public BaseResponse<List<GetRelateRecommendRes>> getRelateRecommend(@PathVariable("brandName") String brandName) {
@@ -73,6 +117,12 @@ public class  ProductController {
         }
     }
 
+    /**
+     * 상세페이지 상품 이미지 조회 API
+     * [GET] /products/detailimage/:productId
+     *
+     * @return BaseResponse<List<GetProductImageRes>>
+     */
     @ResponseBody
     @GetMapping("/detailimage/{productId}")
     public BaseResponse<List<GetProductImageRes>> getDetailProductImage(@PathVariable("productId") int productId) {
@@ -86,6 +136,12 @@ public class  ProductController {
         }
     }
 
+    /**
+     * 상품 상단 정보 조회 API
+     * [GET] /products/topinform/:productId
+     *
+     * @return BaseResponse<List<GetTopInforRes>>
+     */
     @ResponseBody
     @GetMapping("/topinform/{productId}")
     public BaseResponse<List<GetTopInforRes>> getDetailTopInformation(@PathVariable("productId") int productId) {
@@ -99,6 +155,13 @@ public class  ProductController {
         }
     }
 
+
+    /**
+     * 최근거래 조회 API
+     * [GET] /products/recent/:productId
+     *
+     * @return BaseResponse<List<GetRecentRes>>
+     */
     @ResponseBody
     @GetMapping("/recent/{productId}")
     public BaseResponse<List<GetRecentRes>> getDetailRecent(@PathVariable("productId") int productId) {
@@ -112,6 +175,12 @@ public class  ProductController {
         }
     }
 
+    /**
+     * 입찰 현황 조회 API
+     * [GET] /products/deal/:productId/:types
+     *
+     * @return BaseResponse<List<getDealRes>>
+     */
     @ResponseBody
     @GetMapping("/deal/{productId}/{types}")
     public BaseResponse<List<GetDealRes>> getDetailDeal(@PathVariable("productId") int productId,@PathVariable("types") String types) {
@@ -125,19 +194,30 @@ public class  ProductController {
         }
     }
 
+    /**
+     * 사이즈별 거래가 조회 API
+     * [GET] /products/sizes/:productId/:types
+     *
+     * @return BaseResponse<List<GetSizePriceRes>>
+     */
     @ResponseBody
     @GetMapping("/sizes/{productId}/{types}")
-    public BaseResponse<List<GetSizePrice>> getSizeTransPrice(@PathVariable("productId") int productId,@PathVariable("types") String types) {
+    public BaseResponse<List<GetSizePriceRes>> getSizeTransPrice(@PathVariable("productId") int productId, @PathVariable("types") String types) {
         try{
-
-            List<GetSizePrice> getSizePrice = productprovider.getSizeTransPrice(productId,types);
-            return new BaseResponse<>(getSizePrice);
+            List<GetSizePriceRes> getSizePriceRes = productprovider.getSizeTransPrice(productId,types);
+            return new BaseResponse<>(getSizePriceRes);
 
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
     }
 
+    /**
+     * 상품 정보, 구매처 조회 API
+     * [GET] /products/information/:productId
+     *
+     * @return BaseResponse<List<GetInformationRes>>
+     */
     @ResponseBody
     @GetMapping("/information/{productId}")
     public BaseResponse<List<GetInformationRes>> getDetailInformation(@PathVariable("productId") int productId) {
@@ -150,7 +230,12 @@ public class  ProductController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-
+    /**
+     * 검색 페이지 조회 API
+     * [GET] /products/search
+     *
+     * @return BaseResponse<List<GetSearchRes>>
+     */
 
     @ResponseBody
     @GetMapping("/search")
@@ -178,6 +263,13 @@ public class  ProductController {
         }
     }
 
+    /**
+     * 발매 예정 API
+     * [GET] /products/release
+     *
+     * @return BaseResponse<List<GetReleaseRes>>
+     */
+
     @ResponseBody
     @GetMapping("/release")
     public BaseResponse<List<GetReleaseRes>> getReleaseProduct() {
@@ -190,6 +282,12 @@ public class  ProductController {
         }
     }
 
+    /**
+     * 핫이슈 인기 상품 조회 API
+     * [GET] /products/release
+     *
+     * @return BaseResponse<List<GetHotissueRes>>
+     */
     @ResponseBody
     @GetMapping("/hotissue")
     public BaseResponse<List<GetHotissueRes>> getHotissue() {
