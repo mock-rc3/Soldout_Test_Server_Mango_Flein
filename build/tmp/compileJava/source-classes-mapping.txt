@@ -20,6 +20,8 @@ com/example/demo/src/wish/WishController.java
  com.example.demo.src.wish.WishController
 com/example/demo/src/address/AddressController.java
  com.example.demo.src.address.AddressController
+com/example/demo/src/orderHistory/model/PostDealBuyReq.java
+ com.example.demo.src.orderHistory.model.PostDealBuyReq
 com/example/demo/config/BaseResponseStatus.java
  com.example.demo.config.BaseResponseStatus
 com/example/demo/src/notices/NoticeProvider.java
@@ -38,6 +40,8 @@ com/example/demo/src/magazine/model/GetMagazineDetailRes.java
  com.example.demo.src.magazine.model.GetMagazineDetailRes
 com/example/demo/src/products/ProductDao.java
  com.example.demo.src.products.ProductDao
+com/example/demo/src/orderHistory/model/GetDealDetailRes.java
+ com.example.demo.src.orderHistory.model.GetDealDetailRes
 com/example/demo/config/secret/Secret.java
  com.example.demo.config.secret.Secret
 com/example/demo/src/address/AddressProvider.java
@@ -62,6 +66,8 @@ com/example/demo/src/products/model/GetInformationRes.java
  com.example.demo.src.products.model.GetInformationRes
 com/example/demo/src/user/UserService.java
  com.example.demo.src.user.UserService
+com/example/demo/src/orderHistory/model/PostDealSellReq.java
+ com.example.demo.src.orderHistory.model.PostDealSellReq
 com/example/demo/src/wish/WishProvider.java
  com.example.demo.src.wish.WishProvider
 com/example/demo/src/address/AddressDao.java
@@ -76,6 +82,8 @@ com/example/demo/src/magazine/model/GetMagazineRes.java
  com.example.demo.src.magazine.model.GetMagazineRes
 com/example/demo/src/address/model/GetAddressRes.java
  com.example.demo.src.address.model.GetAddressRes
+com/example/demo/src/orderHistory/model/PostDealRes.java
+ com.example.demo.src.orderHistory.model.PostDealRes
 com/example/demo/src/wish/WishService.java
  com.example.demo.src.wish.WishService
 com/example/demo/src/user/model/PostUserReq.java
@@ -86,6 +94,10 @@ com/example/demo/src/user/model/GetFindIdRes.java
  com.example.demo.src.user.model.GetFindIdRes
 com/example/demo/src/wish/model/PostWishReq.java
  com.example.demo.src.wish.model.PostWishReq
+com/example/demo/src/products/model/GetSizePriceRes.java
+ com.example.demo.src.products.model.GetSizePriceRes
+com/example/demo/src/products/model/GetDayAlarmRes.java
+ com.example.demo.src.products.model.GetDayAlarmRes
 com/example/demo/src/orderHistory/model/GetOrderRes.java
  com.example.demo.src.orderHistory.model.GetOrderRes
 com/example/demo/src/orderHistory/OrderHistoryController.java
@@ -110,10 +122,14 @@ com/example/demo/src/test/TestController.java
  com.example.demo.src.test.TestController
 com/example/demo/src/products/model/GetTopInforRes.java
  com.example.demo.src.products.model.GetTopInforRes
+com/example/demo/src/wish/GetSizeRes.java
+ com.example.demo.src.wish.GetSizeRes
 com/example/demo/src/user/model/PostLoginReq.java
  com.example.demo.src.user.model.PostLoginReq
 com/example/demo/src/address/model/PostAddressReq.java
  com.example.demo.src.address.model.PostAddressReq
+com/example/demo/src/orderHistory/model/PatchDeleteOrderReq.java
+ com.example.demo.src.orderHistory.model.PatchDeleteOrderReq
 com/example/demo/src/products/model/GetSizePrice.java
  com.example.demo.src.products.model.GetSizePrice
 com/example/demo/src/products/model/GetSearchRes.java

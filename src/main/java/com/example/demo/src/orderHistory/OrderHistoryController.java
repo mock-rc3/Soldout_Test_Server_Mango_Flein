@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
@@ -32,7 +33,6 @@ public class OrderHistoryController {
         this.orderHistoryService = orderHistoryService;
         this.jwtService = jwtService;
     }
-
     /**
      * 구매, 판매 내역 갯수 조회 API
      * [GET] /orderhistory/:userId/dealnumber
@@ -127,7 +127,6 @@ public class OrderHistoryController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-
     /**
      * 타입별 입찰 주문 조회 API
      * [GET] /orderhistory/:productId/:type
@@ -138,15 +137,30 @@ public class OrderHistoryController {
      */
     @ResponseBody
     @GetMapping("/{productId}/{type}")
-    public BaseResponse<List<GetOrderRes>> getOrderByType(@PathVariable("productId") int product_id, @PathVariable("type") String type, @RequestParam(required = false) Integer size_id) {
+    public BaseResponse<List<GetOrderRes>> getOrderByType(@PathVariable("productId") int product_id, @PathVariable("type") String type) {
         try {
             int user_id = jwtService.getUserId();
-            if (size_id == null) {
                 List<GetOrderRes> getOrderRes = orderHistoryProvider.getOrderByType(product_id, user_id, type);
                 return new BaseResponse<>(getOrderRes);
-            }
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     *  사이즈별 입찰 주문 조회 API
+     *  [GET] /orderhistory/:productId/:type/:size
+     *
+     *  @return BaseResponse<List < GetOrderRes>>
+     */
+    @ResponseBody
+    @GetMapping("/{productId}/{type}/{sizeId}")
+    public BaseResponse<List<GetOrderRes>> getOrderBySize(@PathVariable("productId") int product_id, @PathVariable("type") String type, @PathVariable("sizeId") int size_id) {
+        try {
+            int user_id = jwtService.getUserId();
             List<GetOrderRes> getOrderRes = orderHistoryProvider.getOrderBySize(product_id, user_id, type, size_id);
             return new BaseResponse<>(getOrderRes);
+
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
@@ -154,7 +168,7 @@ public class OrderHistoryController {
 
     /**
      * 즉시 구매가/판매가 조회 API
-     * [GET] /orderhistory/price/:productId/:type
+     * [GET] /orderhistory/price/:type/:productId
      *
      * @return BaseResponse<List < GetOrderPriceRes>>
      */
@@ -170,7 +184,7 @@ public class OrderHistoryController {
                 List<GetOrderPriceRes> getOrderPriceRes = orderHistoryProvider.getMaxPrice(product_id, user_id);
                 return new BaseResponse<>(getOrderPriceRes);
             } else {
-                return new BaseResponse<>(DATABASE_ERROR); //잘못된 타입 validation
+                return new BaseResponse<>(ONLY_BUY_SELL); //잘못된 타입 validation
             }
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
@@ -195,7 +209,7 @@ public class OrderHistoryController {
                 GetOrderPriceRes getOrderPriceRes = orderHistoryProvider.getMaxPriceBySize(product_id, user_id, size_id);
                 return new BaseResponse<>(getOrderPriceRes);
             } else {
-                return new BaseResponse<>(DATABASE_ERROR);
+                return new BaseResponse<>(ONLY_BUY_SELL);
             }
 
         } catch (BaseException exception) {

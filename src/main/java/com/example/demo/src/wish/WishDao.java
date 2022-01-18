@@ -20,7 +20,7 @@ public class WishDao {
     }
 
     public List<GetWishRes> getWish(int userId){
-        String getWishQuery = "select P.product_name, P.color, B.img_url, P.price, S.size_name from FAVORITE F join PRODUCT P  on P.product_id = F.product_id join SIZE S on S.size_id = F.size_id join BRAND_IMAGE B on B.brand_img_id = P.brand_img_id where F.user_id = ? and F.status = 1";
+        String getWishQuery = "select P.product_name, P.color, B.img_url, P.price, S.size_name, S.size_id from FAVORITE F join PRODUCT P  on P.product_id = F.product_id join SIZE S on S.size_id = F.size_id join BRAND_IMAGE B on B.brand_img_id = P.brand_img_id where F.user_id = ? and F.status = 1";
         int getWishParams = userId;
         return this.jdbcTemplate.query(getWishQuery,
                 (rs,rowNum) ->new GetWishRes(
@@ -28,10 +28,22 @@ public class WishDao {
                         rs.getString("color"),
                         rs.getString("img_url"),
                         rs.getInt("price"),
-                        rs.getString("size_name")
+                        rs.getString("size_name"),
+                        rs.getInt("size_id")
                         ), getWishParams
         );
     }
+    public List<GetSizeRes> getSize(int user_id, int product_id){
+        String getSizequery = "select S.size_name, S.size_id from PRODUCT P join SIZE S  on P.type = S.type where P.product_id = ?";
+        int  getSizeParams =  product_id;
+        return this.jdbcTemplate.query(getSizequery,
+                (rs,rowNum) ->new GetSizeRes(
+                        rs.getString("size_name"),
+                        rs.getInt("size_id")
+                ), getSizeParams
+        );
+    }
+
     public int createWish(int userId, PostWishReq postWishReq) {
         String createWishQuery = "insert into FAVORITE(user_id, product_id, size_id) values (?,?,?)";
         Object[] createWishParams = new Object[]{

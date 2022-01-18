@@ -37,7 +37,7 @@ public class WishController {
     }
     /**
      *  고객 찜 조회 API
-     *  [GET] /wishes/:userId
+     *  [GET] /wishes
      *  @return BaseResponse<List<GetWishRes>>
      */
     @ResponseBody
@@ -47,6 +47,22 @@ public class WishController {
             int userIdByJwt = jwtService.getUserId();
             List<GetWishRes> getWishRes = wishProvider.getWish(userIdByJwt);
             return new BaseResponse<>(getWishRes);
+        }catch (BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    /**
+     *  고객 찜 조회 API
+     *  [GET] /wishes
+     *  @return BaseResponse<List<GetWishRes>>
+     */
+    @ResponseBody
+    @GetMapping("/{productId}")
+    public BaseResponse<List<GetSizeRes>> getSize(@PathVariable ("productId") int product_id){
+        try {
+            int userIdByJwt = jwtService.getUserId();
+            List<GetSizeRes> getSizeRes = wishProvider.getSize(userIdByJwt,product_id);
+            return new BaseResponse<>(getSizeRes);
         }catch (BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }

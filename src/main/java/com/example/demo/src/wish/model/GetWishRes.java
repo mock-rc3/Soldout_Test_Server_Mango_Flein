@@ -13,4 +13,5 @@ public class GetWishRes {
     private String img_url;
     private int price;
     private String size_name;
+    private int size_id;
 }

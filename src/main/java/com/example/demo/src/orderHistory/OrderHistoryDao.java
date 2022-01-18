@@ -1,6 +1,8 @@
 package com.example.demo.src.orderHistory;
 
 import com.example.demo.src.orderHistory.model.*;
+import com.example.demo.src.user.model.GetUserRes;
+import com.example.demo.src.user.model.PostUserReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -16,6 +18,7 @@ public class OrderHistoryDao {
     public void setDataSource(DataSource dataSource){
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
+
     public List<GetDealNumberRes> getDealNumber(int userId){
         String getContentQuery = "SELECT\n" +
                 "\t(SELECT COUNT(*) FROM ORDER_HISTORY O\n" +
@@ -79,7 +82,7 @@ public class OrderHistoryDao {
                         rs.getString("brand_image"),
                         rs.getString("product_name"),
                         rs.getInt("hope_price")
-                        ),
+                ),
                 getOrderDealParams);
     }
     //구매,판매 완료 내역 상세 조회
@@ -117,11 +120,6 @@ public class OrderHistoryDao {
                 ),
                 getOrderDealParams);
     }
-
-
-
-
-
     //타입별 입찰 주문 내역 조회
     public List<GetOrderRes> getOrderByType(int product_id, int user_id, String type){
         String getOrderQuery = "SELECT O.order_id, S.size_name, O.hope_price, O.type, COUNT(S.size_name) AS quantity from ORDER_HISTORY O JOIN SIZE S on S.size_id = O.size_id WHERE O.product_id = ? AND O.user_id not in (?) AND O.type = ? AND O.status=1 AND O.order_state=0 AND DATE(NOW()) >= DATE_SUB(O.created_at, INTERVAL O.term DAY) GROUP BY S.size_name, O.hope_price order by (case when O.type = 'buy' then O.hope_price end )desc";
@@ -138,7 +136,7 @@ public class OrderHistoryDao {
     }
     //타입,사이즈별 입찰 주문 내역 조회
     public List<GetOrderRes> getOrderBySize(int product_id, int user_id, String type,int size_id){
-        String getOrderQuery = "SELECT O.order_id, S.size_name, O.hope_price, O.type, COUNT(O.hope_price) AS quantity from ORDER_HISTORY O JOIN SIZE S on S.size_id = O.size_id WHERE O.product_id = ? AND O.user_id not in (?) AND O.type = ? AND O.size_id = ? AND O.status=1 AND O.order_state=0 AND DATE(NOW()) >= DATE_SUB(O.created_at, INTERVAL O.term DAY) GROUP BY O.hope_price order by (case when O.type = 'buy' then O.hope_price end )desc";
+        String getOrderQuery = "SELECT O.order_id, S.size_name, O.hope_price, O.type, COUNT(O.hope_price) AS quantity from ORDER_HISTORY O JOIN SIZE S on S.size_id = O.size_id WHERE O.product_id = ? AND O.user_id not in (?) AND O.type = ? AND S.size_id = ? AND O.status=1 AND O.order_state=0 AND DATE(NOW()) >= DATE_SUB(O.created_at, INTERVAL O.term DAY) GROUP BY O.hope_price order by (case when O.type = 'buy' then O.hope_price end )desc";
 
         Object[] getOrderParams = new Object[]{product_id, user_id, type, size_id};
         return this.jdbcTemplate.query(getOrderQuery,
@@ -254,7 +252,6 @@ public class OrderHistoryDao {
         String lastInsertIdQuery = "select last_insert_id()";
          this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
     }
-
     public int createDealSell(PostDealSellReq postDealSellReq){
         String createUserQuery = "INSERT INTO ORDER_HISTORY(user_id, product_id, size_id, type,point, hope_price , term, return_address, account)\n" +
                 "VALUES (?,?,?,'sell',?,?,?,?,?)";
@@ -281,4 +278,7 @@ public class OrderHistoryDao {
 
         return this.jdbcTemplate.update(deleteQuery,deleteParams);
     }
+
+
+
 }
