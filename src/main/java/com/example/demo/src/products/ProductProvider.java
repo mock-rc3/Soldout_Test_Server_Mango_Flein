@@ -164,6 +164,37 @@ public class ProductProvider {
         }
     }
 
+
+    public List<GetGoodsRes> getGoodsList() throws BaseException {
+        try{
+            List<GetGoodsRes> getGoodsRes = productDao.getGoodsList();
+            return getGoodsRes;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetGoodsRes> getGoodsListFilter(String search) throws BaseException {
+        try{
+            List<GetGoodsRes> getGoodsRes = productDao.getGoodsListFilter(search);
+            return getGoodsRes;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetGoodsRes> getNewSellList() throws BaseException {
+        try{
+            List<GetGoodsRes> getGoodsRes = productDao.getNewSellList();
+            return getGoodsRes;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     public List<GetDayAlarmRes> getDayAlarm() throws BaseException {
         try{
             List<GetDayAlarmRes> getDayAlarmRes = productDao.getDayAlarm();

@@ -74,6 +74,49 @@ public class  ProductController {
     }
 
     /**
+     * 메인페이지 배너, 특정 검색어 제품  조회 API
+     * [GET] /products/goods
+     *
+     * @return BaseResponse<List < GetGoodsRes>>
+     */
+    @ResponseBody
+    @GetMapping("/goods")
+    public BaseResponse<List<GetGoodsRes>> getGoodsList(@RequestParam(value="search",required=false) String search) {
+        try{
+
+            if(search == null){
+                List<GetGoodsRes> getGoodsRes = productprovider.getGoodsList();
+                return new BaseResponse<>(getGoodsRes);
+            }else{
+                List<GetGoodsRes> getGoodsRes = productprovider.getGoodsListFilter(search);
+                return new BaseResponse<>(getGoodsRes);
+            }
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 새로운 즉시 판매가 상품 조회 API
+     * [GET] /products/newsell
+     *
+     * @return BaseResponse<List < GetGoodsRes>>
+     */
+    @ResponseBody
+    @GetMapping("/newsell")
+    public BaseResponse<List<GetGoodsRes>> getNewSellList() {
+        try{
+            List<GetGoodsRes> getGoodsRes = productprovider.getNewSellList();
+            return new BaseResponse<>(getGoodsRes);
+
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
      * 날짜별 발매 상품 API
      * [GET] /products/day
      * 날짜별 발매 상품 API (로그인 한경우)
