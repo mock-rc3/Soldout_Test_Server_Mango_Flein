@@ -77,3 +77,14 @@
 - 서버 반영
 </div>
 </details>
+<details>
+<summary>22.01.17~18</summary>
+<div markdown="1"> 
+- point 조회 API 추가 <br />
+- 포인트 내역 조회 API 추가 <br />
+- 타입 별 포인트 내역 조회 찜 조회 API 수정 <br />
+- 찜 가능 사이즈 조회 API 추가 <br />
+- 구매/판매 입찰 조회 API 수정 <br />
+- 서버 반영
+</div>
+</details>
