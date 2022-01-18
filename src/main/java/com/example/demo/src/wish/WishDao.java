@@ -1,5 +1,6 @@
 package com.example.demo.src.wish;
 
+import com.example.demo.src.wish.model.GetSizeRes;
 import com.example.demo.src.wish.model.GetWishRes;
 import com.example.demo.src.wish.model.PostWishReq;
 import org.springframework.beans.factory.annotation.Autowired;

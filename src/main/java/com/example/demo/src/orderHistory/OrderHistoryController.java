@@ -90,9 +90,7 @@ public class OrderHistoryController {
     @ResponseBody
     @PatchMapping("/{orderId}/delete")
     public BaseResponse<String> modifyOrder(@PathVariable("orderId") int orderId) {
-
         try {
-
             PatchDeleteOrderReq patchDeleteOrderReq = new PatchDeleteOrderReq(orderId);
             orderHistoryService.modifyOrder(patchDeleteOrderReq);
             String result = "삭제 성공";
@@ -115,7 +113,6 @@ public class OrderHistoryController {
         }
     }
 
-
     @ResponseBody
     @GetMapping("/{userId}/{types}/complete")
     public BaseResponse<List<GetDealDetailRes>> getDealComplete(@PathVariable("userId") int userId,@PathVariable("types") String types) {
@@ -130,9 +127,6 @@ public class OrderHistoryController {
     /**
      * 타입별 입찰 주문 조회 API
      * [GET] /orderhistory/:productId/:type
-     * 사이즈별 입찰 주문 조회 API
-     * [GET] /orderhistory/:productId/:type?size=
-     *
      * @return BaseResponse<List < GetOrderRes>>
      */
     @ResponseBody
@@ -150,7 +144,6 @@ public class OrderHistoryController {
     /**
      *  사이즈별 입찰 주문 조회 API
      *  [GET] /orderhistory/:productId/:type/:size
-     *
      *  @return BaseResponse<List < GetOrderRes>>
      */
     @ResponseBody
@@ -169,7 +162,6 @@ public class OrderHistoryController {
     /**
      * 즉시 구매가/판매가 조회 API
      * [GET] /orderhistory/price/:type/:productId
-     *
      * @return BaseResponse<List < GetOrderPriceRes>>
      */
     @ResponseBody
@@ -194,7 +186,6 @@ public class OrderHistoryController {
     /**
      * 특정 사이즈별 즉시 구매가/판매가 조회 API
      * [GET] /orderhistory/price/:type/:productId/:sizeId
-     *
      * @return BaseResponse<List < GetOrderPriceRes>>
      */
     @ResponseBody
@@ -219,11 +210,13 @@ public class OrderHistoryController {
 
 
     @ResponseBody
-    @PatchMapping("/trade/buy")
-    //@Transactional(rollbackFor = Exception.class)
-    public BaseResponse<String> tradeBuy( @RequestBody  PatchtradeBuyReq patchtradeBuyReq) {
+    @PatchMapping("/trade/buy/{userId}")
+    public BaseResponse<String> tradeBuy(@PathVariable("userId") int userId, @RequestBody  PatchtradeBuyReq patchtradeBuyReq) {
         try {
             int trader_id = jwtService.getUserId();
+            if (userId != trader_id) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             orderHistoryService.tradeBuy(trader_id, patchtradeBuyReq);
             String result = "성공";
             return new BaseResponse<>(result);
@@ -232,14 +225,48 @@ public class OrderHistoryController {
         }
     }
     @ResponseBody
-    @PatchMapping("/trade/selling")
-    //@Transactional(rollbackFor = Exception.class)
-    public BaseResponse<String> tradeSelling( @RequestBody PatchtradeSellingReq patchtradeSellingReq) {
+    @PatchMapping("/trade/selling/{userId}")
+    public BaseResponse<String> tradeSelling(@PathVariable("userId") int userId, @RequestBody PatchtradeSellingReq patchtradeSellingReq) {
         try {
             int trader_id = jwtService.getUserId();
+            if (userId != trader_id) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             orderHistoryService.tradeSelling(trader_id,patchtradeSellingReq);
             String result = "성공";
             return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    /**
+     * 최근거래가 조회 API
+     * [GET] /orderhistory/trade/:productId
+     * @return BaseResponse<List <GetTradePriceRes>>
+     */
+    @ResponseBody
+    @GetMapping("/trade/{productId}")
+    public BaseResponse<List<GetTradePriceRes>> getTradePrice(@PathVariable("productId") int product_id) {
+        try {
+            int user_id = jwtService.getUserId();
+            List<GetTradePriceRes> getTradePriceRes = orderHistoryProvider.getTradePrice(product_id);
+            return new BaseResponse<>(getTradePriceRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    /**
+     * 최근거래가 사이즈 별 조회 API
+     * [GET] /orderhistory/trade/:productId/:sizeId
+     * @return BaseResponse<List <GetTradePriceRes>>
+     */
+    @ResponseBody
+    @GetMapping("/trade/{productId}/{sizeId}")
+    public BaseResponse<List<GetTradePriceRes>> getTradePrice(@PathVariable("productId") int product_id, @PathVariable("sizeId") int size_id) {
+        try {
+            int user_id = jwtService.getUserId();
+            List<GetTradePriceRes> getTradePriceRes = orderHistoryProvider.getTradePriceBySize(product_id, size_id);
+            return new BaseResponse<>(getTradePriceRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }

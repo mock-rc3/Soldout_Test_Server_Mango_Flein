@@ -117,6 +117,11 @@ public class UserDao {
         Object[] modifyEmailParams = new Object[]{patchUserReq.getChangeStr(),patchUserReq.getUser_id()};
         return this.jdbcTemplate.update(modifyEmailQuery,modifyEmailParams);
     }
+    public int modifyPassword(String name, String id, String phonenum, PatchPasswordReq patchPasswordReq) {
+        String modifyPasswordQuery = "update USER set password = ? where name = ? and id = ? and phone_num = ?";
+        Object[] modifyPasswordParams = new Object[]{patchPasswordReq.getPassword(), name, id, phonenum};
+        return this.jdbcTemplate.update(modifyPasswordQuery,modifyPasswordParams);
+    }
     public int checkUserId(int user_id){
         String checkUserIdQuery = "select exists(select user_id from USER where user_id = ?)";
         int checkUserIdParams = user_id;

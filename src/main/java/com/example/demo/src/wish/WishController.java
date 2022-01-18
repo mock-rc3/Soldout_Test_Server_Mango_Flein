@@ -2,6 +2,7 @@ package com.example.demo.src.wish;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+import com.example.demo.src.wish.model.GetSizeRes;
 import com.example.demo.src.wish.model.GetWishRes;
 import com.example.demo.src.wish.model.PostWishReq;
 import com.example.demo.src.wish.model.PostWishRes;
@@ -37,14 +38,17 @@ public class WishController {
     }
     /**
      *  고객 찜 조회 API
-     *  [GET] /wishes
+     *  [GET] /wishes/:userId
      *  @return BaseResponse<List<GetWishRes>>
      */
     @ResponseBody
-    @GetMapping("")
-    public BaseResponse<List<GetWishRes>> getWish(){
+    @GetMapping("/{userId}")
+    public BaseResponse<List<GetWishRes>> getWish(@PathVariable("userId") int userId){
         try {
             int userIdByJwt = jwtService.getUserId();
+            if (userId != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             List<GetWishRes> getWishRes = wishProvider.getWish(userIdByJwt);
             return new BaseResponse<>(getWishRes);
         }catch (BaseException exception){
@@ -52,8 +56,8 @@ public class WishController {
         }
     }
     /**
-     *  고객 찜 조회 API
-     *  [GET] /wishes
+     *  사이즈 조회 API
+     *  [GET] /wishes/:productId
      *  @return BaseResponse<List<GetWishRes>>
      */
     @ResponseBody
@@ -69,15 +73,18 @@ public class WishController {
     }
 
     /**
-     * 찜 생성 /wishes
+     * 찜 생성 /wishes/:userId
      * @param postWishReq
      * @return
      */
     @ResponseBody
-    @PostMapping("")
-    public BaseResponse<PostWishRes> createWish(@RequestBody PostWishReq postWishReq) {
+    @PostMapping("/{userId}")
+    public BaseResponse<PostWishRes> createWish(@PathVariable("userId") int userId, @RequestBody PostWishReq postWishReq) {
         try {
             int userIdByJwt = jwtService.getUserId();
+            if (userId != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             PostWishRes postWishRes = wishService.createWish(userIdByJwt,postWishReq);
             return new BaseResponse<>(postWishRes);
         } catch (BaseException exception) {

@@ -27,28 +27,28 @@ public class PointProvider {
         this.jwtService = jwtService;
     }
     public List<GetPointHistoryRes> getPontHistory(int user_id) throws BaseException {
-       // try {
+       try {
             List<GetPointHistoryRes> getPointHistoryRes = pointDao.getPontHistory(user_id);
             return getPointHistoryRes;
-      //  } catch (Exception exception) {
-        //    throw new BaseException(DATABASE_ERROR);
-       // }
+       } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
     public List<GetPointHistoryRes> getPontHistoryByType(int user_id, String type) throws BaseException {
-        //try {
+        try {
             List<GetPointHistoryRes> getPointHistoryRes = pointDao.getPontHistoryByType(user_id,type);
             return getPointHistoryRes;
-       // } catch (Exception exception) {
-        //    throw new BaseException(DATABASE_ERROR);
-        //}
+       } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
     public List<GetPointHistoryRes> getCancelPontHistory(int user_id) throws BaseException {
-       // try {
+        try {
             List<GetPointHistoryRes> getPointHistoryRes = pointDao.getCancelPontHistory(user_id);
             return getPointHistoryRes;
-       // } catch (Exception exception) {
-       //     throw new BaseException(DATABASE_ERROR);
-       // }
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+       }
     }
     public GetPointRes getPoint(int user_id) throws BaseException {
 

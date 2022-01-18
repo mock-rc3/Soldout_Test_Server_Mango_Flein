@@ -115,4 +115,22 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+    public void modifyPassword(String name, String id, String phonenum,  PatchPasswordReq patchPasswordReq) throws BaseException {
+        String pwd;
+        try{
+            //암호화
+            pwd = new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(patchPasswordReq.getPassword());
+            patchPasswordReq.setPassword(pwd);
+        } catch (Exception ignored) {
+           throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
+        }
+        try{
+            int result = userDao.modifyPassword(name, id, phonenum, patchPasswordReq);
+            if(result == 0){
+                throw new BaseException(FAIL_CHANGE_PASSWORD);
+            }
+        } catch(Exception exception){
+           throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

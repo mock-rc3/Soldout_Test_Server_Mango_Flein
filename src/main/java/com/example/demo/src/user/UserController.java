@@ -220,6 +220,27 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+    /**
+     * 비밀번호 변경 API
+     * users/:name/:id/:phonenum
+     * @return
+     */
+    @ResponseBody
+    @PatchMapping("/{name}/{id}/{phonenum}")
+    @Transactional(rollbackFor = Exception.class)
+    public BaseResponse<String> modifyPassword(@PathVariable("name") String name, @PathVariable("id") String id, @PathVariable("phonenum") String phonenum, @RequestBody PatchPasswordReq patchPasswordReq) {
+        try {
+            // pw 정규표현
+            if (!PwPattern(patchPasswordReq.getPassword())) {
+                return new BaseResponse<>(POST_USERS_INVALID_PASSWORD);
+            }
+            userService.modifyPassword(name, id, phonenum, patchPasswordReq);
+            String result = "변경 성공";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
     /**
      * 닉네임 변경 API
@@ -302,6 +323,8 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+
 }
 
 

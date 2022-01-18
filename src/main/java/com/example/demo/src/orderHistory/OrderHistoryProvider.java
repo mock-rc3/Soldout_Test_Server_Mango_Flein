@@ -2,10 +2,7 @@ package com.example.demo.src.orderHistory;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.magazine.model.GetMagazineRes;
-import com.example.demo.src.orderHistory.model.GetDealDetailRes;
-import com.example.demo.src.orderHistory.model.GetDealNumberRes;
-import com.example.demo.src.orderHistory.model.GetOrderPriceRes;
-import com.example.demo.src.orderHistory.model.GetOrderRes;
+import com.example.demo.src.orderHistory.model.*;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,12 +26,12 @@ public class OrderHistoryProvider {
         this.orderHistoryDao = orderHistoryDao;
         this.jwtService = jwtService;
     }
+
     public List<GetDealNumberRes> getDealNumber(int userId) throws BaseException {
-        try{
+        try {
             List<GetDealNumberRes> getDealNumberRes = orderHistoryDao.getDealNumber(userId);
             return getDealNumberRes;
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -58,29 +55,32 @@ public class OrderHistoryProvider {
     }
 
     public List<GetOrderRes> getOrderByType(int product_id, int user_id, String type) throws BaseException {
-       try {
+        try {
             List<GetOrderRes> getOrderRes = orderHistoryDao.getOrderByType(product_id, user_id, type);
             return getOrderRes;
-       } catch (Exception exception) {
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
-       }
+        }
     }
+
     public List<GetOrderRes> getOrderBySize(int product_id, int user_id, String type, int size_id) throws BaseException {
         try {
             List<GetOrderRes> getOrderRes = orderHistoryDao.getOrderBySize(product_id, user_id, type, size_id);
             return getOrderRes;
-       } catch (Exception exception) {
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
     public List<GetOrderPriceRes> getMaxPrice(int product_id, int user_id) throws BaseException {
-         try {
-        List<GetOrderPriceRes> getOrderPriceRes = orderHistoryDao.getMaxPrice(product_id, user_id);
-        return getOrderPriceRes;
-         } catch (Exception exception) {
+        try {
+            List<GetOrderPriceRes> getOrderPriceRes = orderHistoryDao.getMaxPrice(product_id, user_id);
+            return getOrderPriceRes;
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
+        }
     }
-    }
+
     public List<GetOrderPriceRes> getMinPrice(int product_id, int user_id) throws BaseException {
         try {
             List<GetOrderPriceRes> getOrderPriceRes = orderHistoryDao.getMinPrice(product_id, user_id);
@@ -89,18 +89,38 @@ public class OrderHistoryProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
     public GetOrderPriceRes getMaxPriceBySize(int product_id, int user_id, int size_id) throws BaseException {
         try {
             GetOrderPriceRes getOrderPriceRes = orderHistoryDao.getMaxPriceBySize(product_id, user_id, size_id);
             return getOrderPriceRes;
         } catch (Exception exception) {
-           throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(DATABASE_ERROR);
         }
     }
+
     public GetOrderPriceRes getMinPriceBySize(int product_id, int user_id, int size_id) throws BaseException {
-       try {
+        try {
             GetOrderPriceRes getOrderPriceRes = orderHistoryDao.getMinPriceBySize(product_id, user_id, size_id);
             return getOrderPriceRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetTradePriceRes> getTradePrice(int product_id) throws BaseException {
+        try {
+            List<GetTradePriceRes> getTradePriceRes = orderHistoryDao.getTradePrice(product_id);
+            return getTradePriceRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetTradePriceRes> getTradePriceBySize(int product_id, int size_id) throws BaseException {
+        try {
+            List<GetTradePriceRes> getTradePriceRes = orderHistoryDao.getTradePriceBySize(product_id, size_id);
+            return getTradePriceRes;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
