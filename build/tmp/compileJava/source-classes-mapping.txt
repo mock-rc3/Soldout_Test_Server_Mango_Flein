@@ -96,6 +96,8 @@ com/example/demo/src/wish/WishService.java
  com.example.demo.src.wish.WishService
 com/example/demo/src/user/model/PostUserReq.java
  com.example.demo.src.user.model.PostUserReq
+com/example/demo/src/products/model/GetGoodsRes.java
+ com.example.demo.src.products.model.GetGoodsRes
 com/example/demo/src/orderHistory/model/GetDealNumberRes.java
  com.example.demo.src.orderHistory.model.GetDealNumberRes
 com/example/demo/src/user/model/GetFindIdRes.java
