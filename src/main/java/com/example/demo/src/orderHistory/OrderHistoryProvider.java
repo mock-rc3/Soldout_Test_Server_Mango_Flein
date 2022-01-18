@@ -57,9 +57,6 @@ public class OrderHistoryProvider {
         }
     }
 
-
-
-
     public List<GetOrderRes> getOrderByType(int product_id, int user_id, String type) throws BaseException {
        try {
             List<GetOrderRes> getOrderRes = orderHistoryDao.getOrderByType(product_id, user_id, type);
@@ -72,7 +69,7 @@ public class OrderHistoryProvider {
         try {
             List<GetOrderRes> getOrderRes = orderHistoryDao.getOrderBySize(product_id, user_id, type, size_id);
             return getOrderRes;
-        } catch (Exception exception) {
+       } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
