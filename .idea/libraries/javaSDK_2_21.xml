@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="javaSDK-2.21">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../먐/javaSDK-2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../먐/json-simple-1.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../먐/gson-2.8.9.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
