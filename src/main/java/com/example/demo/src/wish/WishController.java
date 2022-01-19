@@ -57,11 +57,11 @@ public class WishController {
     }
     /**
      *  사이즈 조회 API
-     *  [GET] /wishes/:productId
+     *  [GET] /wishes/size/:productId
      *  @return BaseResponse<List<GetWishRes>>
      */
     @ResponseBody
-    @GetMapping("/{productId}")
+    @GetMapping("/size/{productId}")
     public BaseResponse<List<GetSizeRes>> getSize(@PathVariable ("productId") int product_id){
         try {
             int userIdByJwt = jwtService.getUserId();
