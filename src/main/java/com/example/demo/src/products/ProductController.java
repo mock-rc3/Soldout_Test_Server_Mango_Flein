@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.example.demo.config.BaseResponseStatus.INVALID_USER_JWT;
+
 @RestController
 @RequestMapping("/products")
 public class  ProductController {
@@ -128,10 +130,15 @@ public class  ProductController {
     @GetMapping("/day")
     public BaseResponse<List<GetDayAlarmRes>> getDayAlarm(@RequestParam(value="userId",required=false,defaultValue = "0") int userId ) {
         try{
+
             if(userId == 0){
                 List<GetDayAlarmRes> getDayAlarmRes = productprovider.getDayAlarm();
                 return new BaseResponse<>(getDayAlarmRes);
             }else{
+                int userIdByJwt = jwtService.getUserId();
+                if (userId != userIdByJwt) {
+                    return new BaseResponse<>(INVALID_USER_JWT);
+                }
                 List<GetDayAlarmRes> getDayAlarmRes = productprovider.getDayAlarmFilter(userId);
                 return new BaseResponse<>(getDayAlarmRes);
             }
@@ -290,15 +297,15 @@ public class  ProductController {
                 return new BaseResponse<>(getSearchRes);
             }
             else if(category == null && keyword != null ){
-                List<GetSearchRes> getRankRes = productprovider.getSearchKeywordFilter(keyword);
-                return new BaseResponse<>(getRankRes);
+                List<GetSearchRes> getSearchRes = productprovider.getSearchKeywordFilter(keyword);
+                return new BaseResponse<>(getSearchRes);
             }
             else if(category != null && keyword == null ){
-                List<GetSearchRes> getRankRes = productprovider.getSearchCategoryFilter(category);
-                return new BaseResponse<>(getRankRes);
+                List<GetSearchRes> getSearchRes = productprovider.getSearchCategoryFilter(category);
+                return new BaseResponse<>(getSearchRes);
             }else{
-                List<GetSearchRes> getRankRes = productprovider.getSearchFilter(category,keyword);
-                return new BaseResponse<>(getRankRes);
+                List<GetSearchRes> getSearchRes = productprovider.getSearchFilter(category,keyword);
+                return new BaseResponse<>(getSearchRes);
             }
 
         } catch(BaseException exception){
