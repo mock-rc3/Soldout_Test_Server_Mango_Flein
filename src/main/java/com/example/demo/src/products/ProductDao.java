@@ -20,6 +20,7 @@ public class ProductDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    //신규 발매 상품 조회
     public List<GetNewRes> getNewProduct(){
         String getContentQuery = "SELECT P.product_id, P.product_name, P.price,I.url,P.release_day FROM PRODUCT P\n" +
                 "LEFT JOIN IMAGE I \n" +
@@ -38,6 +39,7 @@ public class ProductDao {
         );
     }
 
+    //날짜별 발매 상품
     public List<GetDayAlarmRes> getDayAlarm(){
         String getContentQuery = "SELECT date(P.release_day) as release_day,P.product_id,P.product_name,I.url,BI.img_url as brand_image, 'N' AS alarm_check FROM PRODUCT P\n" +
                 "LEFT JOIN IMAGE I \n" +
@@ -59,6 +61,7 @@ public class ProductDao {
         );
     }
 
+    //날짜별 발매 상품 API (로그인 한경우)
     public List<GetDayAlarmRes> getDayAlarmFilter(int userId){
         String getContentQuery = "SELECT date(P.release_day) as release_day,P.product_id,P.product_name,I.url,BI.img_url as brand_image, IF(nullif(N.product_id,0)>0,'Y','N') AS alarm_check   FROM PRODUCT P\n" +
                 "LEFT JOIN IMAGE I \n" +
@@ -85,6 +88,7 @@ public class ProductDao {
     }
 
 
+    // 상품 랭킹 조회
     public List<GetRankRes> getRankProduct(){
         String getContentQuery = "SELECT P.product_id,I.url ,P.product_name, P.price FROM PRODUCT P\n" +
                 "LEFT JOIN IMAGE I \n" +
@@ -104,28 +108,29 @@ public class ProductDao {
     }
 
 
+    //메인페이지 배너, 특정 검색어 제품  조회
     public List<GetGoodsRes> getGoodsList(){
         String getContentQuery = "SELECT P.product_id, I.url , P.product_name,\n" +
                 "(\n" +
-                "\tSELECT total_price FROM ORDER_HISTORY OH\n" +
-                "\tWHERE OH.product_id = P.product_id AND order_state = 1\n" +
-                "\tORDER BY complete_time DESC LIMIT 1\n" +
+                "SELECT total_price FROM ORDER_HISTORY OH\n" +
+                "WHERE OH.product_id = P.product_id AND order_state = 1\n" +
+                "ORDER BY complete_time DESC LIMIT 1\n" +
                 ")AS max_count,\n" +
                 "(select ROUND(((a.max_count-a.pre_max_count)/a.pre_max_count)*100,1) as percent\n" +
                 "from \n" +
                 "(\n" +
                 "    select \n" +
-                "\t\t(\n" +
-                "\t\t\tSELECT total_price FROM ORDER_HISTORY OH\n" +
-                "\t\tWHERE  OH.product_id = P.product_id AND order_state = 1\n" +
-                "\t\tORDER BY complete_time DESC LIMIT 1\n" +
-                "\t\t)AS max_count,\n" +
-                "\t\t(\n" +
-                "\t\t\t\n" +
-                "\t\t\tSELECT total_price FROM ORDER_HISTORY OH\n" +
-                "\t\t\tWHERE  OH.product_id = P.product_id AND order_state = 1\n" +
-                "\t\t\tORDER BY complete_time DESC LIMIT 1,1\n" +
-                "\t\t)AS pre_max_count\n" +
+                "(\n" +
+                "SELECT total_price FROM ORDER_HISTORY OH\n" +
+                "WHERE  OH.product_id = P.product_id AND order_state = 1\n" +
+                "ORDER BY complete_time DESC LIMIT 1\n" +
+                ")AS max_count,\n" +
+                "(\n" +
+                "\n" +
+                "SELECT total_price FROM ORDER_HISTORY OH\n" +
+                "WHERE  OH.product_id = P.product_id AND order_state = 1\n" +
+                "ORDER BY complete_time DESC LIMIT 1,1\n" +
+                ")AS pre_max_count\n" +
                 ")as  a) as percent\n" +
                 "FROM PRODUCT P \n" +
                 "LEFT JOIN IMAGE I  \n" +
@@ -143,28 +148,29 @@ public class ProductDao {
         );
     }
 
+    //메인페이지 배너, 특정 검색어 제품  조회 (검색어 있는경우)
     public List<GetGoodsRes> getGoodsListFilter(String search){
         String getContentQuery = "SELECT P.product_id, I.url , P.product_name,\n" +
                 "(\n" +
-                "\tSELECT total_price FROM ORDER_HISTORY OH\n" +
-                "\tWHERE OH.product_id = P.product_id AND order_state = 1\n" +
-                "\tORDER BY complete_time DESC LIMIT 1\n" +
+                "SELECT total_price FROM ORDER_HISTORY OH\n" +
+                "WHERE OH.product_id = P.product_id AND order_state = 1\n" +
+                "ORDER BY complete_time DESC LIMIT 1\n" +
                 ")AS max_count,\n" +
                 "(select ROUND(((a.max_count-a.pre_max_count)/a.pre_max_count)*100,1) as percent\n" +
                 "from \n" +
                 "(\n" +
                 "    select \n" +
-                "\t\t(\n" +
-                "\t\t\tSELECT total_price FROM ORDER_HISTORY OH\n" +
-                "\t\tWHERE  OH.product_id = P.product_id AND order_state = 1\n" +
-                "\t\tORDER BY complete_time DESC LIMIT 1\n" +
-                "\t\t)AS max_count,\n" +
-                "\t\t(\n" +
-                "\t\t\t\n" +
-                "\t\t\tSELECT total_price FROM ORDER_HISTORY OH\n" +
-                "\t\t\tWHERE  OH.product_id = P.product_id AND order_state = 1\n" +
-                "\t\t\tORDER BY complete_time DESC LIMIT 1,1\n" +
-                "\t\t)AS pre_max_count\n" +
+                "(\n" +
+                "SELECT total_price FROM ORDER_HISTORY OH\n" +
+                "WHERE  OH.product_id = P.product_id AND order_state = 1\n" +
+                "ORDER BY complete_time DESC LIMIT 1\n" +
+                ")AS max_count,\n" +
+                "(\n" +
+                "\n" +
+                "SELECT total_price FROM ORDER_HISTORY OH\n" +
+                "WHERE  OH.product_id = P.product_id AND order_state = 1\n" +
+                "ORDER BY complete_time DESC LIMIT 1,1\n" +
+                ")AS pre_max_count\n" +
                 ")as  a) as percent\n" +
                 "FROM PRODUCT P \n" +
                 "LEFT JOIN IMAGE I  \n" +
@@ -185,31 +191,32 @@ public class ProductDao {
     }
 
 
+    //새로운 즉시 판매가 상품 조회
     public List<GetGoodsRes> getNewSellList(){
         String getContentQuery = "SELECT P.product_id, I.url , P.product_name,\n" +
                 "(\n" +
-                "\tSELECT hope_price FROM ORDER_HISTORY OH\n" +
-                "\tWHERE OH.product_id = P.product_id AND order_state = 0\n" +
+                "SELECT hope_price FROM ORDER_HISTORY OH\n" +
+                "WHERE OH.product_id = P.product_id AND order_state = 0\n" +
                 "    AND type = 'sell'\n" +
-                "\tORDER BY created_at DESC LIMIT 1\n" +
+                "ORDER BY created_at DESC LIMIT 1\n" +
                 ")AS max_count,\n" +
                 "(select ROUND(((a.max_count-a.pre_max_count)/a.pre_max_count)*100,1) as percent\n" +
                 "from \n" +
                 "(\n" +
                 "    select \n" +
-                "\t\t(\n" +
-                "\t\t\tSELECT hope_price FROM ORDER_HISTORY OH\n" +
-                "\t\t\tWHERE OH.product_id = P.product_id AND order_state = 0\n" +
-                "\t\t\tAND type = 'sell'\n" +
-                "\t\t\tORDER BY created_at DESC LIMIT 1\n" +
-                "\t\t)AS max_count,\n" +
-                "\t\t(\n" +
-                "\t\t\t\n" +
-                "\t\t\tSELECT hope_price FROM ORDER_HISTORY OH\n" +
-                "\t\t\tWHERE OH.product_id = P.product_id AND order_state = 0\n" +
-                "\t\t\tAND type = 'sell'\n" +
-                "\t\t\tORDER BY created_at DESC LIMIT 1,1\n" +
-                "\t\t)AS pre_max_count\n" +
+                "(\n" +
+                "SELECT hope_price FROM ORDER_HISTORY OH\n" +
+                "WHERE OH.product_id = P.product_id AND order_state = 0\n" +
+                "AND type = 'sell'\n" +
+                "ORDER BY created_at DESC LIMIT 1\n" +
+                ")AS max_count,\n" +
+                "(\n" +
+                "\n" +
+                "SELECT hope_price FROM ORDER_HISTORY OH\n" +
+                "WHERE OH.product_id = P.product_id AND order_state = 0\n" +
+                "AND type = 'sell'\n" +
+                "ORDER BY created_at DESC LIMIT 1,1\n" +
+                ")AS pre_max_count\n" +
                 ")as  a) as percent\n" +
                 "FROM PRODUCT P \n" +
                 "LEFT JOIN IMAGE I  \n" +
@@ -228,6 +235,7 @@ public class ProductDao {
         );
     }
 
+    //검색페이지 조회
     public List<GetSearchRes> getSearchProduct(){
         String getContentQuery = "SELECT P.product_id, I.url,P.brand,BI.img_url  as brand_image  , P.product_name, OH.total_price \n" +
                 "FROM PRODUCT P \n" +
@@ -236,9 +244,9 @@ public class ProductDao {
                 "LEFT JOIN BRAND_IMAGE BI \n" +
                 "ON BI.brand_img_id = P.brand_img_id \n" +
                 "LEFT JOIN  ( \n" +
-                "\tSELECT * FROM ORDER_HISTORY  WHERE order_state = 1   AND complete_time \n" +
-                "\tIN (  SELECT MAX(complete_time) FROM ORDER_HISTORY group by complete_time ) \n" +
-                "\tGROUP BY product_id \n" +
+                "SELECT * FROM ORDER_HISTORY  WHERE order_state = 1   AND complete_time \n" +
+                "IN (  SELECT MAX(complete_time) FROM ORDER_HISTORY group by complete_time ) \n" +
+                "GROUP BY product_id \n" +
                 ") OH\n" +
                 " ON OH.product_id = P.product_id\n" +
                 " GROUP BY product_name \n";
@@ -254,6 +262,7 @@ public class ProductDao {
         );
     }
 
+    //검색페이지 조회 (키워드 있는경우)
     public List<GetSearchRes> getSearchKeywordFilter(String keyword){
         String getContentQuery = "SELECT  P.product_id,I.url,P.brand,BI.img_url  as brand_image  , P.product_name, OH.total_price \n" +
                 "FROM PRODUCT P \n" +
@@ -262,9 +271,9 @@ public class ProductDao {
                 "LEFT JOIN BRAND_IMAGE BI \n" +
                 "ON BI.brand_img_id = P.brand_img_id \n" +
                 "LEFT JOIN  ( \n" +
-                "\tSELECT * FROM ORDER_HISTORY  WHERE order_state = 1   AND complete_time \n" +
-                "\tIN (  SELECT MAX(complete_time) FROM ORDER_HISTORY group by complete_time ) \n" +
-                "\tGROUP BY product_id \n" +
+                "SELECT * FROM ORDER_HISTORY  WHERE order_state = 1   AND complete_time \n" +
+                "IN (  SELECT MAX(complete_time) FROM ORDER_HISTORY group by complete_time ) \n" +
+                "GROUP BY product_id \n" +
                 ") OH\n" +
                 " ON OH.product_id = P.product_id\n" +
                 " WHERE product_name regexp ?\n" +
@@ -282,6 +291,7 @@ public class ProductDao {
         );
     }
 
+    //검색페이지 조회 (카테고리 있는경우)
     public List<GetSearchRes> getSearchCategoryFilter(String category){
         String getContentQuery = "SELECT  P.product_id,I.url,P.brand,BI.img_url  as brand_image  , P.product_name, OH.total_price \n" +
                 "FROM PRODUCT P \n" +
@@ -290,9 +300,9 @@ public class ProductDao {
                 "LEFT JOIN BRAND_IMAGE BI \n" +
                 "ON BI.brand_img_id = P.brand_img_id \n" +
                 "LEFT JOIN  ( \n" +
-                "\tSELECT * FROM ORDER_HISTORY  WHERE order_state = 1   AND complete_time \n" +
-                "\tIN (  SELECT MAX(complete_time) FROM ORDER_HISTORY group by complete_time ) \n" +
-                "\tGROUP BY product_id \n" +
+                "SELECT * FROM ORDER_HISTORY  WHERE order_state = 1   AND complete_time \n" +
+                "IN (  SELECT MAX(complete_time) FROM ORDER_HISTORY group by complete_time ) \n" +
+                "GROUP BY product_id \n" +
                 ") OH\n" +
                 " ON OH.product_id = P.product_id\n" +
                 " WHERE P.category = ?\n" +
@@ -310,6 +320,7 @@ public class ProductDao {
         );
     }
 
+    //검색페이지 조회 (키워드,카테고리 둘다 있는경우)
     public List<GetSearchRes> getSearchFilter(String category,String keyword){
         String getContentQuery = "SELECT  P.product_id,I.url,P.brand,BI.img_url  as brand_image  , P.product_name, OH.total_price \n" +
                 "FROM PRODUCT P \n" +
@@ -318,9 +329,9 @@ public class ProductDao {
                 "LEFT JOIN BRAND_IMAGE BI \n" +
                 "ON BI.brand_img_id = P.brand_img_id \n" +
                 "LEFT JOIN  ( \n" +
-                "\tSELECT * FROM ORDER_HISTORY  WHERE order_state = 1   AND complete_time \n" +
-                "\tIN (  SELECT MAX(complete_time) FROM ORDER_HISTORY group by complete_time ) \n" +
-                "\tGROUP BY product_id \n" +
+                "SELECT * FROM ORDER_HISTORY  WHERE order_state = 1   AND complete_time \n" +
+                "IN (  SELECT MAX(complete_time) FROM ORDER_HISTORY group by complete_time ) \n" +
+                "GROUP BY product_id \n" +
                 ") OH\n" +
                 " ON OH.product_id = P.product_id\n" +
                 " WHERE P.category = ?" +
@@ -340,6 +351,7 @@ public class ProductDao {
         );
     }
 
+    //연관 추천 상품 조회
     public List<GetRelateRecommendRes> getRelateRecommend( String brandName){
         String getContentQuery = "SELECT P.product_id,I.url,BI.img_url  as brand_image  , P.product_name, OH.total_price \n" +
                 "FROM PRODUCT P \n" +
@@ -369,45 +381,45 @@ public class ProductDao {
     }
 
 
-
+    // 상품 상단 정보 조회
     public List<GetTopInforRes> getDetailTopInformation(int productId){
         String getContentQuery = "SELECT BI.img_url  as brand_image  , P.product_name,P.product_name_eng,\n" +
                 "(\n" +
-                "\tSELECT total_price FROM SOLDOUT.ORDER_HISTORY\n" +
-                "\tWHERE product_id =? AND order_state = 1\n" +
-                "\tORDER BY complete_time DESC LIMIT 1\n" +
+                "SELECT total_price FROM SOLDOUT.ORDER_HISTORY\n" +
+                "WHERE product_id =? AND order_state = 1\n" +
+                "ORDER BY complete_time DESC LIMIT 1\n" +
                 ")AS max_count,\n" +
                 "(select (a.max_count-a.pre_max_count) as diff_count\n" +
                 "from \n" +
                 "(\n" +
                 "    select \n" +
-                "\t\t(\n" +
-                "\t\t\tSELECT total_price FROM SOLDOUT.ORDER_HISTORY\n" +
-                "\t\tWHERE product_id =? AND order_state = 1\n" +
-                "\t\tORDER BY complete_time DESC LIMIT 1\n" +
-                "\t\t)AS max_count,\n" +
-                "\t\t(\n" +
-                "\t\t\t\n" +
-                "\t\t\tSELECT total_price FROM SOLDOUT.ORDER_HISTORY\n" +
-                "\t\t\tWHERE product_id = ? AND order_state = 1\n" +
-                "\t\t\tORDER BY complete_time DESC LIMIT 1,1\n" +
-                "\t\t)AS pre_max_count\n" +
+                "(\n" +
+                "SELECT total_price FROM SOLDOUT.ORDER_HISTORY\n" +
+                "WHERE product_id =? AND order_state = 1\n" +
+                "ORDER BY complete_time DESC LIMIT 1\n" +
+                ")AS max_count,\n" +
+                "(\n" +
+                "\n" +
+                "SELECT total_price FROM SOLDOUT.ORDER_HISTORY\n" +
+                "WHERE product_id = ? AND order_state = 1\n" +
+                "ORDER BY complete_time DESC LIMIT 1,1\n" +
+                ")AS pre_max_count\n" +
                 ")as  a) as diff_count,\n" +
                 "(select round(((a.max_count-a.pre_max_count)/a.pre_max_count)*100,1) as percent\n" +
                 "from \n" +
                 "(\n" +
                 "    select \n" +
-                "\t\t(\n" +
-                "\t\t\tSELECT total_price FROM SOLDOUT.ORDER_HISTORY\n" +
-                "\t\tWHERE product_id =? AND order_state = 1\n" +
-                "\t\tORDER BY complete_time DESC LIMIT 1\n" +
-                "\t\t)AS max_count,\n" +
-                "\t\t(\n" +
-                "\t\t\t\n" +
-                "\t\t\tSELECT total_price FROM SOLDOUT.ORDER_HISTORY\n" +
-                "\t\t\tWHERE product_id = ? AND order_state = 1\n" +
-                "\t\t\tORDER BY complete_time DESC LIMIT 1,1\n" +
-                "\t\t)AS pre_max_count\n" +
+                "(\n" +
+                "SELECT total_price FROM SOLDOUT.ORDER_HISTORY\n" +
+                "WHERE product_id =? AND order_state = 1\n" +
+                "ORDER BY complete_time DESC LIMIT 1\n" +
+                ")AS max_count,\n" +
+                "(\n" +
+                "\n" +
+                "SELECT total_price FROM SOLDOUT.ORDER_HISTORY\n" +
+                "WHERE product_id = ? AND order_state = 1\n" +
+                "ORDER BY complete_time DESC LIMIT 1,1\n" +
+                ")AS pre_max_count\n" +
                 ")as  a) as percent\n" +
                 "FROM PRODUCT P \n" +
                 "LEFT JOIN IMAGE I  \n" +
@@ -429,13 +441,14 @@ public class ProductDao {
         );
     }
 
+    //최근거래 조회
     public List<GetRecentRes> getDetailRecent(int productId){
         String getContentQuery =  "SELECT \n" +
-                "\tCASE\n" +
+                "CASE\n" +
                 "    WHEN TIMESTAMPDIFF(HOUR,OH.complete_time,NOW()) <1 THEN CONCAT(TIMESTAMPDIFF(MINUTE,OH.complete_time,NOW()),'분전')\n" +
-                "\tWHEN TIMESTAMPDIFF(HOUR,OH.complete_time,NOW()) <25 THEN CONCAT(TIMESTAMPDIFF(HOUR,OH.complete_time,NOW()),'시간전')\n" +
+                "WHEN TIMESTAMPDIFF(HOUR,OH.complete_time,NOW()) <25 THEN CONCAT(TIMESTAMPDIFF(HOUR,OH.complete_time,NOW()),'시간전')\n" +
                 "    ELSE DATE_FORMAT(OH.complete_time, '%Y-%m-%d')  \n" +
-                "\tEND AS times,OH.complete_time,S.size_name,OH.total_price FROM ORDER_HISTORY OH\n" +
+                "END AS times,OH.complete_time,S.size_name,OH.total_price FROM ORDER_HISTORY OH\n" +
                 "LEFT JOIN SIZE S\n" +
                 "ON S.size_id = OH.size_id\n" +
                 "WHERE product_id = ? AND order_state = 1\n" +
@@ -451,9 +464,10 @@ public class ProductDao {
         );
     }
 
+    // 입찰 현황 조회
     public List<GetDealRes> getDetailDeal(int productId,String types){
         String getContentQuery = "SELECT \n" +
-                "\t1 AS amount,S.size_name,OH.hope_price FROM ORDER_HISTORY OH\n" +
+                "1 AS amount,S.size_name,OH.hope_price FROM ORDER_HISTORY OH\n" +
                 "LEFT JOIN SIZE S\n" +
                 "ON S.size_id = OH.size_id\n" +
                 "WHERE product_id = ? AND order_state = 0 AND OH.type = ? \n" +
@@ -470,6 +484,7 @@ public class ProductDao {
         );
     }
 
+    //사이즈별 거래가 조회
     public List<GetSizePriceRes> getSizeTransPrice(int productId, String types){
         String getContentQuery = " (SELECT O.product_id,O.order_id,O.size_id, 'ALL' AS size_name, MIN(hope_price) AS hope_price FROM SOLDOUT.ORDER_HISTORY O\n" +
                 "LEFT JOIN SIZE S\n" +
@@ -481,7 +496,7 @@ public class ProductDao {
                 "        LEFT JOIN SIZE S\n" +
                 "        ON S.size_id = O.size_id\n" +
                 "        WHERE O.product_id = ? AND O.order_state = 0\n" +
-                "\t\tAND O.type = ?\n" +
+                "AND O.type = ?\n" +
                 "        GROUP BY O.size_id\n" +
                 "        )\n" +
                 "    ORDER BY O.size_id\n" +
@@ -499,6 +514,7 @@ public class ProductDao {
         );
     }
 
+    //상세페이지 상품 이미지 조회
     public List<GetProductImageRes> getDetailProductImage(int productId){
         String getContentQuery = "SELECT I.url FROM PRODUCT P\n" +
                 "LEFT JOIN IMAGE I\n" +
@@ -513,6 +529,7 @@ public class ProductDao {
         );
     }
 
+    //상품 정보, 구매처 조회 A
     public List<GetInformationRes> getDetailInformation(int productId){
         String getContentQuery =   "SELECT  P.brand,  P.model_num, date_format( P.release_day,'%Y-%m-%d')as release_day,  P.color,  P.price,PC.purchase_name, PC.image_url FROM PRODUCT P\n" +
                 "LEFT JOIN PURCHASE PC\n" +
@@ -538,7 +555,7 @@ public class ProductDao {
 
 
 
-
+    //상품 랭킹 조회 (카테고리 있는경우)
     public List<GetRankRes> getRankProductFilter(String category){
         String getContentQuery = "SELECT  P.product_id, I.url ,P.product_name, P.price FROM PRODUCT P\n" +
                 "LEFT JOIN IMAGE I \n" +
@@ -558,6 +575,8 @@ public class ProductDao {
                 ),getRankFilterParam
         );
     }
+
+    // 발매예정 조회
     public List<GetReleaseRes> getReleaseProduct(){
         String getContentQuery = "SELECT  P.product_id,P.product_name,P.release_day, P.price,I.url FROM PRODUCT P\n" +
                 "LEFT JOIN IMAGE I \n" +
@@ -576,6 +595,7 @@ public class ProductDao {
         );
     }
 
+    // 핫이슈 인기 상품 조회
     public List<GetHotissueRes> getHotissue(){
         String getContentQuery = "SELECT P.product_name,P.release_day,I.url FROM PRODUCT P\n" +
                 "LEFT JOIN IMAGE I \n" +

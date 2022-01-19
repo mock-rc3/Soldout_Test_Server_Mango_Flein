@@ -37,7 +37,6 @@ public class NoticeController {
     @ResponseBody
     @PostMapping("")
     public BaseResponse<PostNoticeRes> createNotice(@RequestBody PostNoticeReq postNoticeReq) {
-        logger.warn("111");
         try{
             PostNoticeRes postContentClickRes = noticeService.createNotice(postNoticeReq);
             return new BaseResponse<>(postContentClickRes);

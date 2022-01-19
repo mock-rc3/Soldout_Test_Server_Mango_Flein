@@ -19,27 +19,28 @@ public class OrderHistoryDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    //구매, 판매 내역 갯수 조회
     public List<GetDealNumberRes> getDealNumber(int userId){
         String getContentQuery = "SELECT\n" +
-                "\t(SELECT COUNT(*) FROM ORDER_HISTORY O\n" +
-                "\tWHERE user_id = ? AND order_state = 0\n" +
-                "\tAND type = 'buy'\n" +
-                "\tGROUP BY type) AS buy_bidding\n" +
+                "(SELECT COUNT(*) FROM ORDER_HISTORY O\n" +
+                "WHERE user_id = ? AND order_state = 0\n" +
+                "AND type = 'buy'\n" +
+                "GROUP BY type) AS buy_bidding\n" +
                 "    ,\n" +
-                "\t(SELECT COUNT(*) FROM ORDER_HISTORY O\n" +
-                "\tWHERE user_id = ? AND order_state = 1\n" +
-                "\tAND type = 'buy'\n" +
-                "\tGROUP BY type) AS buy_end\n" +
+                "(SELECT COUNT(*) FROM ORDER_HISTORY O\n" +
+                "WHERE user_id = ? AND order_state = 1\n" +
+                "AND type = 'buy'\n" +
+                "GROUP BY type) AS buy_end\n" +
                 "    ,\n" +
-                "\t(SELECT COUNT(*) FROM ORDER_HISTORY O\n" +
-                "\tWHERE user_id = ? AND order_state = 0\n" +
-                "\tAND type = 'SELL'\n" +
-                "\tGROUP BY type) AS sell_bidding\n" +
+                "(SELECT COUNT(*) FROM ORDER_HISTORY O\n" +
+                "WHERE user_id = ? AND order_state = 0\n" +
+                "AND type = 'SELL'\n" +
+                "GROUP BY type) AS sell_bidding\n" +
                 "    ,\n" +
-                "\t(SELECT COUNT(*) FROM ORDER_HISTORY O\n" +
-                "\tWHERE user_id = ? AND order_state = 1\n" +
-                "\tAND type = 'SELL'\n" +
-                "\tGROUP BY type) AS sell_end\n";
+                "(SELECT COUNT(*) FROM ORDER_HISTORY O\n" +
+                "WHERE user_id = ? AND order_state = 1\n" +
+                "AND type = 'SELL'\n" +
+                "GROUP BY type) AS sell_end\n";
         int getSearchFilterParam = userId;
         return this.jdbcTemplate.query(getContentQuery,
                 (rs,rowNum) -> new GetDealNumberRes(
@@ -183,6 +184,7 @@ public class OrderHistoryDao {
                         rs.getString("size_name")),
                 getOrderPriceParams);
     }
+
     public GetOrderPriceRes getMinPriceBySize(int product_id, int user_id, int size_id){
         String getOrderPriceQuery = "SELECT O.order_id, O.user_id, O.hope_price AS imt_price, S.size_name from ORDER_HISTORY O JOIN SIZE S on S.size_id = O.size_id WHERE O.product_id = ? AND O.user_id not in (?) AND O.type = 'sell' AND O.size_id = ? AND O.status=1 AND O.order_state=0 AND DATE(NOW()) >= DATE_SUB(O.created_at, INTERVAL O.term DAY) ORDER BY O.hope_price limit 1;";
         Object[] getOrderPriceParams = new Object[]{product_id, user_id, size_id};

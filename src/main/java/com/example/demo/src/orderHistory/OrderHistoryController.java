@@ -44,7 +44,10 @@ public class OrderHistoryController {
     @GetMapping("/{userId}/dealnumber")
     public BaseResponse<List<GetDealNumberRes>> getDealNumber(@PathVariable("userId") int userId) {
         try{
-
+            int trader_id = jwtService.getUserId();
+            if (userId != trader_id) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             List<GetDealNumberRes> getDealNumberRes = orderHistoryProvider.getDealNumber(userId);
             return new BaseResponse<>(getDealNumberRes);
 
@@ -87,6 +90,12 @@ public class OrderHistoryController {
         }
     }
 
+    /**
+     *  입찰 내역 삭제
+     * [PATCH] /orderhistory/:orderId/delete
+     *
+     * @return BaseResponse<patchDeleteOrderReq>
+     */
     @ResponseBody
     @PatchMapping("/{orderId}/delete")
     public BaseResponse<String> modifyOrder(@PathVariable("orderId") int orderId) {
@@ -100,11 +109,20 @@ public class OrderHistoryController {
         }
     }
 
-
+    /**
+     *   구매,판매 입찰 내역 상세 조회
+     * [GET] /orderhistory/:userId/:types/deal
+     *
+     * @return BaseResponse<List < GetDealDetailRes>>
+     */
     @ResponseBody
     @GetMapping("/{userId}/{types}/deal")
     public BaseResponse<List<GetDealDetailRes>> getDealDetail(@PathVariable("userId") int userId,@PathVariable("types") String types) {
         try{
+            int trader_id = jwtService.getUserId();
+            if (userId != trader_id) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             List<GetDealDetailRes> getDealDetailRes = orderHistoryProvider.getDealDetail(userId,types);
             return new BaseResponse<>(getDealDetailRes);
 
@@ -113,10 +131,20 @@ public class OrderHistoryController {
         }
     }
 
+    /**
+     *   구매,판매 완료 내역 상세 조회
+     * [GET] /orderhistory/:userId/:types/complete
+     *
+     * @return BaseResponse<List < GetDealDetailRes>>
+     */
     @ResponseBody
     @GetMapping("/{userId}/{types}/complete")
     public BaseResponse<List<GetDealDetailRes>> getDealComplete(@PathVariable("userId") int userId,@PathVariable("types") String types) {
         try{
+            int trader_id = jwtService.getUserId();
+            if (userId != trader_id) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             List<GetDealDetailRes> getDealDetailRes = orderHistoryProvider.getDealComplete(userId,types);
             return new BaseResponse<>(getDealDetailRes);
 
