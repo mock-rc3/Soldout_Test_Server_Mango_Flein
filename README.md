@@ -2,7 +2,7 @@
 라이징테스트_서버_솔드아웃_a_망고_플라인
 
 
-<img width="200" alt="soldout" src="https://user-images.githubusercontent.com/95139402/150359990-03af50ef-52ac-46f6-bb4b-37f0575530d0.png">
+<img width="200" alt="soldout" src="https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-19/s150x150/91860215_262565728098376_2714454975005589504_n.jpg?_nc_ht=scontent-gmp1-1.cdninstagram.com&_nc_cat=1&_nc_ohc=2RMcTXYbmcYAX8bLbam&edm=ABfd0MgBAAAA&ccb=7-4&oh=00_AT_ZvUMvVr1BNNZpaeLtajD5sBezuYHSFY0CMwKeoYa40g&oe=61EFDF26&_nc_sid=7bff83">
 
 ## 프로젝트 소개
 - 한정판 중고거래 마켓 무신사 솔드아웃 어플을 클론한 프로젝트 입니다
