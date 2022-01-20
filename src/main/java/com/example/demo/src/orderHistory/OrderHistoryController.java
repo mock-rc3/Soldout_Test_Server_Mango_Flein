@@ -92,14 +92,17 @@ public class OrderHistoryController {
 
     /**
      *  입찰 내역 삭제
-     * [PATCH] /orderhistory/:orderId/delete
+     * [PATCH] /orderhistory/trade/:orderId/delete
      *
      * @return BaseResponse<patchDeleteOrderReq>
      */
     @ResponseBody
-    @PatchMapping("/{orderId}/delete")
+    @PatchMapping("/trade/{orderId}/delete")
     public BaseResponse<String> modifyOrder(@PathVariable("orderId") int orderId) {
         try {
+            if(orderHistoryProvider.checkOrderIdExist(orderId) == 0){
+                return new BaseResponse<>(NOT_ORDERHISTORY_EXISTS_ORDERID);
+            }
             PatchDeleteOrderReq patchDeleteOrderReq = new PatchDeleteOrderReq(orderId);
             orderHistoryService.modifyOrder(patchDeleteOrderReq);
             String result = "삭제 성공";
@@ -123,6 +126,9 @@ public class OrderHistoryController {
             if (userId != trader_id) {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
+            if(orderHistoryProvider.checkTypesExist(types) == 0){
+                return new BaseResponse<>(NOT_PRODUCTS_EXISTS_TYPES);
+            }
             List<GetDealDetailRes> getDealDetailRes = orderHistoryProvider.getDealDetail(userId,types);
             return new BaseResponse<>(getDealDetailRes);
 
@@ -144,6 +150,10 @@ public class OrderHistoryController {
             int trader_id = jwtService.getUserId();
             if (userId != trader_id) {
                 return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            if(orderHistoryProvider.checkTypesExist(types) == 0){
+                return new BaseResponse<>(NOT_PRODUCTS_EXISTS_TYPES);
             }
             List<GetDealDetailRes> getDealDetailRes = orderHistoryProvider.getDealComplete(userId,types);
             return new BaseResponse<>(getDealDetailRes);

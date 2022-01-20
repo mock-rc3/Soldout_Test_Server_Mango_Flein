@@ -161,6 +161,21 @@ public class OrderHistoryDao {
                         rs.getString("size_name")),
                 getOrderPriceParams);
     }
+
+    //orderId 확인
+    public int checkOrderIdExist(int  orderId){
+        String checkExistOrderQuery = "SELECT (EXISTS(SELECT * FROM ORDER_HISTORY WHERE order_id = ?))";
+        Object[] checkExistOrderParams = new Object[]{orderId};
+        return this.jdbcTemplate.queryForObject(checkExistOrderQuery, int.class, checkExistOrderParams);
+    }
+
+    //types 확인
+    public int checkTypesExist(String types){
+        String checkExistTypeQuery = "SELECT (EXISTS(SELECT * FROM ORDER_HISTORY WHERE type = ?))";
+        Object[] checkExistTypeParams = new Object[]{types};
+        return this.jdbcTemplate.queryForObject(checkExistTypeQuery, int.class, checkExistTypeParams);
+    }
+
     //전체 즉시 구매가
     public List<GetOrderPriceRes>  getMinPrice(int product_id, int user_id){
         String getOrderPriceQuery = "SELECT O.order_id, O.user_id, min(O.hope_price) AS imt_price, S.size_name from ORDER_HISTORY O JOIN SIZE S on S.size_id = O.size_id WHERE O.product_id = ? AND O.user_id not in (?) AND O.type = 'sell' AND O.status=1 AND O.order_state=0 AND DATE(NOW()) >= DATE_SUB(O.created_at, INTERVAL O.term DAY) group by S.size_name";

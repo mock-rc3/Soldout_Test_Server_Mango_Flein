@@ -164,6 +164,42 @@ public class ProductProvider {
         }
     }
 
+    public int checkCategoryExist(String category) throws BaseException {
+        try{
+            return productDao.checkCategoryExist(category);
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public int checkBrandExist(String brandName) throws BaseException {
+        try{
+            return productDao.checkBrandExist(brandName);
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public int checkProductIdExist(int productId) throws BaseException {
+        try{
+            return productDao.checkProductIdExist(productId);
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public int checkTypesExist(String types) throws BaseException {
+        try{
+            return productDao.checkTypesExist(types);
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 
     public List<GetGoodsRes> getGoodsList() throws BaseException {
         try{

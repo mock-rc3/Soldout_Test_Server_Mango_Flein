@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.example.demo.config.BaseResponseStatus.*;
 import static com.example.demo.config.BaseResponseStatus.INVALID_USER_JWT;
 
 @RestController
@@ -51,6 +52,8 @@ public class  ProductController {
         }
     }
 
+
+
     /**
      * 상품 랭킹 조회 API
      * [GET] /products/rank
@@ -66,6 +69,9 @@ public class  ProductController {
                 List<GetRankRes> getRankRes = productprovider.getRankProduct();
                 return new BaseResponse<>(getRankRes);
             }else{
+                if(productprovider.checkCategoryExist(category) == 0){
+                    return new BaseResponse<>(NOT_PRODUCTS_EXISTS_CATEGORY);
+                }
                 List<GetRankRes> getRankRes = productprovider.getRankProductFilter(category);
                 return new BaseResponse<>(getRankRes);
             }
@@ -158,7 +164,9 @@ public class  ProductController {
     @GetMapping("/brand/{brandName}")
     public BaseResponse<List<GetRelateRecommendRes>> getRelateRecommend(@PathVariable("brandName") String brandName) {
         try{
-
+            if(productprovider.checkBrandExist(brandName) == 0){
+                return new BaseResponse<>(NOT_PRODUCTS_EXISTS_BRANDNAME);
+            }
             List<GetRelateRecommendRes> getRelateRecommendRes = productprovider.getRelateRecommend(brandName);
             return new BaseResponse<>(getRelateRecommendRes);
 
@@ -177,7 +185,9 @@ public class  ProductController {
     @GetMapping("/detailimage/{productId}")
     public BaseResponse<List<GetProductImageRes>> getDetailProductImage(@PathVariable("productId") int productId) {
         try{
-
+            if(productprovider.checkProductIdExist(productId) == 0){
+                return new BaseResponse<>(NOT_PRODUCTS_EXISTS_PRODUTID);
+            }
             List<GetProductImageRes> getProductImageRes = productprovider.getDetailProductImage(productId);
             return new BaseResponse<>(getProductImageRes);
 
@@ -196,7 +206,9 @@ public class  ProductController {
     @GetMapping("/topinform/{productId}")
     public BaseResponse<List<GetTopInforRes>> getDetailTopInformation(@PathVariable("productId") int productId) {
         try{
-
+            if(productprovider.checkProductIdExist(productId) == 0){
+                return new BaseResponse<>(NOT_PRODUCTS_EXISTS_PRODUTID);
+            }
             List<GetTopInforRes> getTopInforRes = productprovider.getDetailTopInformation(productId);
             return new BaseResponse<>(getTopInforRes);
 
@@ -216,7 +228,9 @@ public class  ProductController {
     @GetMapping("/recent/{productId}")
     public BaseResponse<List<GetRecentRes>> getDetailRecent(@PathVariable("productId") int productId) {
         try{
-
+            if(productprovider.checkProductIdExist(productId) == 0){
+                return new BaseResponse<>(NOT_PRODUCTS_EXISTS_PRODUTID);
+            }
             List<GetRecentRes> getRecentRes = productprovider.getDetailRecent(productId);
             return new BaseResponse<>(getRecentRes);
 
@@ -235,7 +249,12 @@ public class  ProductController {
     @GetMapping("/deal/{productId}/{types}")
     public BaseResponse<List<GetDealRes>> getDetailDeal(@PathVariable("productId") int productId,@PathVariable("types") String types) {
         try{
-
+            if(productprovider.checkProductIdExist(productId) == 0){
+                return new BaseResponse<>(NOT_PRODUCTS_EXISTS_PRODUTID);
+            }
+            if(productprovider.checkTypesExist(types) == 0){
+                return new BaseResponse<>(NOT_PRODUCTS_EXISTS_TYPES);
+            }
             List<GetDealRes> getDealRes = productprovider.getDetailDeal(productId,types);
             return new BaseResponse<>(getDealRes);
 
@@ -254,6 +273,12 @@ public class  ProductController {
     @GetMapping("/sizes/{productId}/{types}")
     public BaseResponse<List<GetSizePriceRes>> getSizeTransPrice(@PathVariable("productId") int productId, @PathVariable("types") String types) {
         try{
+            if(productprovider.checkProductIdExist(productId) == 0){
+                return new BaseResponse<>(NOT_PRODUCTS_EXISTS_PRODUTID);
+            }
+            if(productprovider.checkTypesExist(types) == 0){
+                return new BaseResponse<>(NOT_PRODUCTS_EXISTS_TYPES);
+            }
             List<GetSizePriceRes> getSizePriceRes = productprovider.getSizeTransPrice(productId,types);
             return new BaseResponse<>(getSizePriceRes);
 
@@ -272,7 +297,9 @@ public class  ProductController {
     @GetMapping("/information/{productId}")
     public BaseResponse<List<GetInformationRes>> getDetailInformation(@PathVariable("productId") int productId) {
         try{
-
+            if(productprovider.checkProductIdExist(productId) == 0){
+                return new BaseResponse<>(NOT_PRODUCTS_EXISTS_PRODUTID);
+            }
             List<GetInformationRes> getInformationRes = productprovider.getDetailInformation(productId);
             return new BaseResponse<>(getInformationRes);
 
@@ -301,9 +328,15 @@ public class  ProductController {
                 return new BaseResponse<>(getSearchRes);
             }
             else if(category != null && keyword == null ){
+                if(productprovider.checkCategoryExist(category) == 0){
+                    return new BaseResponse<>(NOT_PRODUCTS_EXISTS_CATEGORY);
+                }
                 List<GetSearchRes> getSearchRes = productprovider.getSearchCategoryFilter(category);
                 return new BaseResponse<>(getSearchRes);
             }else{
+                if(productprovider.checkCategoryExist(category) == 0){
+                    return new BaseResponse<>(NOT_PRODUCTS_EXISTS_CATEGORY);
+                }
                 List<GetSearchRes> getSearchRes = productprovider.getSearchFilter(category,keyword);
                 return new BaseResponse<>(getSearchRes);
             }
