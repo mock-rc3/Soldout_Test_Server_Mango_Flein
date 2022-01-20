@@ -6,9 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-
 import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
 
 @Service
@@ -22,6 +20,7 @@ public class AddressProvider {
         this.addressDao = addressDao;
     }
 
+    //
     public List<GetAddressRes> getAddress(int userId) throws BaseException {
         try {
             List<GetAddressRes> getAddressRes = addressDao.getAddress(userId);

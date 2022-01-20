@@ -9,12 +9,7 @@ import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.regex.Pattern;
-
-
 import static com.example.demo.config.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.isRegexEmail;
 
@@ -39,7 +34,7 @@ public class UserController {
     /**
      * 회원 정보 조회 API
      * [GET] /users/:userId
-     *
+     * @param user_id
      * @return BaseResponse<GetUserRes>
      */
     @ResponseBody
@@ -56,7 +51,7 @@ public class UserController {
     /**
      * 회원가입 API
      * [POST] /users
-     *
+     * @param postUserReq
      * @return BaseResponse<PostUserRes>
      */
     // Body
@@ -113,7 +108,6 @@ public class UserController {
 
     /**
      * 비밀번호 정규표현 점검
-     *
      * @param str
      * @return t : 포함, f : 미포함
      */
@@ -125,7 +119,6 @@ public class UserController {
 
     /**
      * 아이디 정규표현 점검
-     *
      * @param str
      * @return t : 포함, f : 미포함
      */
@@ -137,7 +130,6 @@ public class UserController {
 
     /**
      * 닉네임 길이 점검
-     *
      * @param str
      * @return t , f
      */
@@ -152,7 +144,7 @@ public class UserController {
     /**
      * 로그인 API
      * [POST] /users/login
-     *
+     * @param postLoginReq
      * @return BaseResponse<PostLoginRes>
      */
     @ResponseBody
@@ -181,14 +173,12 @@ public class UserController {
     /**
      * 유저 삭제 API
      * [PATCH] /users/:userId/delete
-     *
+     * @param user_id
      * @return BaseResponse<String>
      */
     @ResponseBody
     @PatchMapping("/{userId}/delete")
-
     public BaseResponse<String> deleteUser(@PathVariable("userId") int user_id) {
-
         try {
             int userIdByJwt = jwtService.getUserId();
             if (user_id != userIdByJwt) {
@@ -206,8 +196,9 @@ public class UserController {
     /**
      * 아이디 찾기 API
      * [GET] /users/:name/:phonenum
-     *
-     * @return BaseResponse<GetUserRes>
+     * @param name 유저 이름
+     * @param phonenum 유저 핸드폰번호
+     * @return BaseResponse<String>
      */
     @ResponseBody
     @GetMapping("/{name}/{phonenum}")
@@ -220,10 +211,15 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
     /**
      * 비밀번호 변경 API
-     * users/:name/:id/:phonenum
-     * @return
+     * [PATCH] /users/:name/:id/:phonenum
+     * @param name 유저 이름
+     * @param id 유저 아이디
+     * @param phonenum 유저 핸드폰번호
+     * @param patchPasswordReq
+     * @return BaseResponse<String>
      */
     @ResponseBody
     @PatchMapping("/{name}/{id}/{phonenum}")
@@ -244,10 +240,10 @@ public class UserController {
 
     /**
      * 닉네임 변경 API
-     *
-     * @param user_id
+     * [PATCH] /users/:userId/nickname
+     * @param user_id 유저 아이디
      * @param user
-     * @return
+     * @return BaseResponse<String>
      */
     @ResponseBody
     @PatchMapping("/{userId}/nickname")
@@ -272,10 +268,10 @@ public class UserController {
 
     /**
      * 이메일 변경 API
-     *
-     * @param user_id
+     * [PATCH] /users/:userId/phonenum
+     * @param user_id 유저 아이디
      * @param user
-     * @return
+     * @return BaseResponse<String>
      */
     @ResponseBody
     @PatchMapping("/{userId}/email")
@@ -299,12 +295,13 @@ public class UserController {
         }
     }
 
+
     /**
      * 핸드폰번호 변경 API
-     *
-     * @param user_id
+     * [PATCH] /users/:userId/phonenum
+     * @param user_id 유저 아이디
      * @param user
-     * @return
+     * @return BaseResponse<String>
      */
     @ResponseBody
     @PatchMapping("/{userId}/phonenum")

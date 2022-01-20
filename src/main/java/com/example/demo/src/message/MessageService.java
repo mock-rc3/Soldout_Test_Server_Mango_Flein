@@ -14,12 +14,12 @@ public class MessageService {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
     private MessageDetail messageDetail;
 
+    //GET 인증 메세지 전송
     public void sendMessage(int userId, String phonenum, String cerNum) {
         String api_key = "NCSPGW7RIFOGZEBL";
         String api_secret = "BFGGFJBGCYEUU1EEW2GYE3JRZWNZCRWL";
         Message coolsms = new Message(api_key, api_secret);
 
-        // 4 params(to, from, type, text) are mandatory. must be filled
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("to", phonenum);    // 수신전화번호
         params.put("from", "01036370120");    // 발신전화번호
@@ -30,9 +30,9 @@ public class MessageService {
             messageDetail = new MessageDetail(userId,phonenum, cerNum);
         } catch (CoolsmsException e) {
         }
-
     }
 
+    //GET 인증 메세지 확인
     public int checkMessage(int userId, String phonenum, String cerNum) {
         if(messageDetail.getUser_id()==userId&&messageDetail.getCer_num().equals(cerNum)&&messageDetail.getPhone_num().equals(phonenum)){
             return 1;

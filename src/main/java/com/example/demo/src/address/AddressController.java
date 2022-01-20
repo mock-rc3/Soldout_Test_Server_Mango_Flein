@@ -11,9 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 import static com.example.demo.config.BaseResponseStatus.INVALID_USER_JWT;
 
 @RestController
@@ -29,15 +27,16 @@ public class AddressController {
     @Autowired
     private final JwtService jwtService;;
 
-
     public AddressController(AddressProvider addressProvider, AddressService addressService, JwtService jwtService) {
         this.addressProvider = addressProvider;
         this.addressService = addressService;
         this.jwtService = jwtService;
     }
+
     /**
-     *  고객 주소 조회 API
+     *  고객 배송지 조회 API
      *  [GET] /address/:userId
+     *  @param userId 유저 아이디
      *  @return BaseResponse<List<GetAddressRes>>
      */
     @ResponseBody
@@ -56,9 +55,11 @@ public class AddressController {
     }
 
     /**
-     * 주소 생성 /address/:userId
+     * 배송지 추가 API
+     * [POST] /address/:userId
+     * @param userId 유저 아이디
      * @param postAddressReq
-     * @return
+     * @return BaseResponse<PostAddressRes>
      */
     @ResponseBody
     @PostMapping("/{userId}")
@@ -76,11 +77,12 @@ public class AddressController {
     }
 
     /**
-     * * 주소 삭제 /address/:addressId/:userId/delete
-     * @param addressId
+     * 배송지 삭제 API
+     * [PATCH] /address/:addressId/:userId/delete
+     * @param addressId 주소 아이디
+     * @param userId 유저 아이디
      * @return BaseResponse<String>
      */
-
     @ResponseBody
     @PatchMapping("/{addressId}/{userId}/delete")
     @Transactional(rollbackFor = Exception.class)
@@ -97,9 +99,5 @@ public class AddressController {
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
-
-
     }
-
-
 }

@@ -67,6 +67,7 @@ public class UserDao {
                 getPwdParams
                 );
     }
+
     public User getUserId(int user_id){
         String getPwdQuery = "select user_id, id, password, phone_num, email, name, nickname, point from USER where user_id = ?";
         int getPwdParams = user_id;
@@ -93,6 +94,7 @@ public class UserDao {
 
         return this.jdbcTemplate.update(deleteUserQuery,deleteUserParams);
     }
+
     public GetFindIdRes findId (String name, String phoneNum){
         String getFindIdQuery = "select id from USER where name = ? and phone_num =?";
         Object[] getFindIdParams = new Object[]{name, phoneNum};
@@ -107,21 +109,25 @@ public class UserDao {
         Object[] modifyNickNameParams = new Object[]{patchUserReq.getChangeStr(),patchUserReq.getUser_id()};
         return this.jdbcTemplate.update(modifyNickNameQuery,modifyNickNameParams);
     }
+
     public int modifyPhoneNum(PatchUserReq patchUserReq) {
         String modifyPhoneNumQuery = "update USER set phone_num = ? where user_id = ? ";
         Object[] modifyPhoneNumParams = new Object[]{patchUserReq.getChangeStr(),patchUserReq.getUser_id()};
         return this.jdbcTemplate.update(modifyPhoneNumQuery,modifyPhoneNumParams);
     }
+
     public int modifyEmail(PatchUserReq patchUserReq) {
         String modifyEmailQuery = "update USER set email = ? where user_id = ? ";
         Object[] modifyEmailParams = new Object[]{patchUserReq.getChangeStr(),patchUserReq.getUser_id()};
         return this.jdbcTemplate.update(modifyEmailQuery,modifyEmailParams);
     }
+
     public int modifyPassword(String name, String id, String phonenum, PatchPasswordReq patchPasswordReq) {
         String modifyPasswordQuery = "update USER set password = ? where name = ? and id = ? and phone_num = ?";
         Object[] modifyPasswordParams = new Object[]{patchPasswordReq.getPassword(), name, id, phonenum};
         return this.jdbcTemplate.update(modifyPasswordQuery,modifyPasswordParams);
     }
+
     public int checkUserId(int user_id){
         String checkUserIdQuery = "select exists(select user_id from USER where user_id = ?)";
         int checkUserIdParams = user_id;
@@ -129,6 +135,7 @@ public class UserDao {
                 int.class,
                 checkUserIdParams);
     }
+
     public int checkEmail(String email){
         String checkEmailQuery = "select exists(select email from USER where email = ?)";
         String checkEmailParams = email;
@@ -136,6 +143,7 @@ public class UserDao {
                 int.class,
                 checkEmailParams);
     }
+
     public int checkId(String id){
         String checkIdQuery = "select exists(select id from USER where id = ?)";
         String checkIdParams = id;
@@ -143,6 +151,7 @@ public class UserDao {
                 int.class,
                 checkIdParams);
     }
+
     public int checkNickname(String nickname){
         String checkNicknameQuery = "select exists(select nickname from USER where nickname = ?)";
         String checkNicknameParams = nickname;
@@ -150,6 +159,7 @@ public class UserDao {
                 int.class,
                 checkNicknameParams);
     }
+
     public int checkPhoneNum(String phone_num){
         String checkNicknameQuery = "select exists(select phone_num from USER where phone_num = ?)";
         String checkNicknameParams = phone_num;
@@ -157,6 +167,7 @@ public class UserDao {
                 int.class,
                 checkNicknameParams);
     }
+
     public int checkStatus(String id){
         String checkStatusQuery = "select status from USER where id = ?";
         String checkStatusParams = id;

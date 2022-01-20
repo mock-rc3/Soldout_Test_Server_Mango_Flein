@@ -54,14 +54,7 @@ public class OrderHistoryProvider {
         }
     }
 
-    public List<GetOrderRes> getOrderByType(int product_id, int user_id, String type) throws BaseException {
-        try {
-            List<GetOrderRes> getOrderRes = orderHistoryDao.getOrderByType(product_id, user_id, type);
-            return getOrderRes;
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
+
 
     public int checkOrderIdExist(int orderId) throws BaseException {
         try{
@@ -81,6 +74,17 @@ public class OrderHistoryProvider {
         }
     }
 
+    // GET 타입별 입찰 주문 조회
+    public List<GetOrderRes> getOrderByType(int product_id, int user_id, String type) throws BaseException {
+        try {
+            List<GetOrderRes> getOrderRes = orderHistoryDao.getOrderByType(product_id, user_id, type);
+            return getOrderRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    // GET 사이즈별 입찰 주문 조회
     public List<GetOrderRes> getOrderBySize(int product_id, int user_id, String type, int size_id) throws BaseException {
         try {
             List<GetOrderRes> getOrderRes = orderHistoryDao.getOrderBySize(product_id, user_id, type, size_id);
@@ -90,6 +94,7 @@ public class OrderHistoryProvider {
         }
     }
 
+    // GET 즉시 판매가 조회
     public List<GetOrderPriceRes> getMaxPrice(int product_id, int user_id) throws BaseException {
         try {
             List<GetOrderPriceRes> getOrderPriceRes = orderHistoryDao.getMaxPrice(product_id, user_id);
@@ -99,6 +104,7 @@ public class OrderHistoryProvider {
         }
     }
 
+    // GET 즉시 구매가 조회
     public List<GetOrderPriceRes> getMinPrice(int product_id, int user_id) throws BaseException {
         try {
             List<GetOrderPriceRes> getOrderPriceRes = orderHistoryDao.getMinPrice(product_id, user_id);
@@ -108,6 +114,7 @@ public class OrderHistoryProvider {
         }
     }
 
+    // GET 사이즈별 즉시 판매가 조회
     public GetOrderPriceRes getMaxPriceBySize(int product_id, int user_id, int size_id) throws BaseException {
         try {
             GetOrderPriceRes getOrderPriceRes = orderHistoryDao.getMaxPriceBySize(product_id, user_id, size_id);
@@ -117,6 +124,7 @@ public class OrderHistoryProvider {
         }
     }
 
+    // GET 사이즈별 즉시 구매가 조회
     public GetOrderPriceRes getMinPriceBySize(int product_id, int user_id, int size_id) throws BaseException {
         try {
             GetOrderPriceRes getOrderPriceRes = orderHistoryDao.getMinPriceBySize(product_id, user_id, size_id);
@@ -126,6 +134,7 @@ public class OrderHistoryProvider {
         }
     }
 
+    // GET 최근 거래가 내역 조회
     public List<GetTradePriceRes> getTradePrice(int product_id) throws BaseException {
         try {
             List<GetTradePriceRes> getTradePriceRes = orderHistoryDao.getTradePrice(product_id);
@@ -135,6 +144,7 @@ public class OrderHistoryProvider {
         }
     }
 
+    // GET 최근거래가 사이즈 별 조회
     public List<GetTradePriceRes> getTradePriceBySize(int product_id, int size_id) throws BaseException {
         try {
             List<GetTradePriceRes> getTradePriceRes = orderHistoryDao.getTradePriceBySize(product_id, size_id);

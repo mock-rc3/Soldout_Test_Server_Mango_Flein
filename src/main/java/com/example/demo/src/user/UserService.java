@@ -1,7 +1,5 @@
 package com.example.demo.src.user;
 
-
-
 import com.example.demo.config.BaseException;
 import com.example.demo.config.secret.Secret;
 import com.example.demo.src.user.model.*;
@@ -11,11 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import static com.example.demo.config.BaseResponseStatus.*;
 
-
-// Service Create, Update, Delete 의 로직 처리
 @Service
 public class UserService {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -23,7 +18,6 @@ public class UserService {
     private final UserDao userDao;
     private final UserProvider userProvider;
     private final JwtService jwtService;
-
 
     @Autowired
     public UserService(UserDao userDao, UserProvider userProvider, JwtService jwtService) {
@@ -33,7 +27,7 @@ public class UserService {
 
     }
 
-    //POST
+    //POST 회원가입
     public PostUserRes createUser(PostUserReq postUserReq) throws BaseException {
         //중복
         if(userProvider.checkEmail(postUserReq.getEmail()) ==1){
@@ -66,6 +60,7 @@ public class UserService {
         }
     }
 
+    // PATCH 유저 삭제
     public void deleteUser(PatchDeleteUserReq patchDeleteUserReq) throws BaseException {
         try{
             int result = userDao.deleteUser(patchDeleteUserReq);
@@ -76,6 +71,8 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    // PATCH 닉네임 변경
     public void modifyNickName(PatchUserReq patchUserReq) throws BaseException {
         if(userProvider.checkNickname(patchUserReq.getChangeStr()) ==1){
             throw new BaseException(POST_USERS_EXISTS_NICKNAME);
@@ -89,6 +86,8 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    // PATCH 이메일 변경
     public void modifyEmail(PatchUserReq patchUserReq) throws BaseException {
         if(userProvider.checkNickname(patchUserReq.getChangeStr()) ==1){
             throw new BaseException(POST_USERS_EXISTS_EMAIL);
@@ -102,6 +101,8 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    // PATCH 핸드폰번호 변경
     public void modifyPhoneNum(PatchUserReq patchUserReq) throws BaseException {
         if(userProvider.checkNickname(patchUserReq.getChangeStr()) ==1){
             throw new BaseException(POST_USERS_EXISTS_PHONENUM);
@@ -115,6 +116,8 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    // PATCH 비밀번호 변경
     public void modifyPassword(String name, String id, String phonenum,  PatchPasswordReq patchPasswordReq) throws BaseException {
         String pwd;
         try{

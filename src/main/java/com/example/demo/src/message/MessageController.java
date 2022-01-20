@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Random;
 
-import static com.example.demo.config.BaseResponseStatus.INVALID_USER_JWT;
+import static com.example.demo.config.BaseResponseStatus.*;
 
 @RestController
 @RequestMapping("/messages")
@@ -31,6 +31,8 @@ public class MessageController {
     /**
      * 핸드폰 인증 메세지 전송 api
      * [GET] /messages/:userId
+     * @param user_id
+     * @param phonenum
      * @return cerNum
      */
     @ResponseBody
@@ -47,6 +49,9 @@ public class MessageController {
                 String ran = Integer.toString(rand.nextInt(10));
                 cerNum += ran;
             }
+            if(phonenum.isEmpty()){
+                return new BaseResponse<>(GET_MESSAGES_EMPTY_PHONENUM);
+            }
             messageService.sendMessage(userId, phonenum, cerNum);
             return new BaseResponse<>(cerNum);
         } catch (BaseException exception) {
@@ -54,10 +59,13 @@ public class MessageController {
         }
 
     }
+
     /**
-     * 핸드폰 인증 메세지 인증 api
+     * 핸드폰 인증 메세지 확인 api
      * [GET] /messages/check/:userId
-     * @return 인증 결과
+     * @param user_id
+     * @param getMessageReq
+     * @return BaseResponse<String> 인증 결과
      */
     @ResponseBody
     @GetMapping("/check/{userId}")
