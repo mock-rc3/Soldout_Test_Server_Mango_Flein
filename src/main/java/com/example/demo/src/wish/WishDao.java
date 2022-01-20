@@ -34,6 +34,7 @@ public class WishDao {
                         ), getWishParams
         );
     }
+
     public List<GetSizeRes> getSize(int user_id, int product_id){
         String getSizequery = "select S.size_name, S.size_id from PRODUCT P join SIZE S  on P.type = S.type where P.product_id = ?";
         int  getSizeParams =  product_id;
@@ -55,17 +56,13 @@ public class WishDao {
         this.jdbcTemplate.update(createWishQuery, createWishParams);
         String lastInsertIdQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
-
     }
 
     public int deleteWish(int favoriteId) {
         String deleteWishQuery = "update FAVORITE set status = 0 where favorite_id = ? ";
         int deleteWishParams = favoriteId;
-
         return this.jdbcTemplate.update(deleteWishQuery, deleteWishParams);
     }
-
-
 }
 
 

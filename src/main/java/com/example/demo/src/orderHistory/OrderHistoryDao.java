@@ -188,6 +188,7 @@ public class OrderHistoryDao {
                         rs.getString("size_name")),
                 getOrderPriceParams);
     }
+
     public GetOrderPriceRes getMaxPriceBySize(int product_id, int user_id, int size_id){
         String getOrderPriceQuery = "SELECT O.order_id, O.user_id, O.hope_price AS imt_price, S.size_name from ORDER_HISTORY O JOIN SIZE S on S.size_id = O.size_id WHERE  O.product_id = ? AND O.user_id not in (?) AND O.type = 'buy' AND O.size_id = ? AND O.status=1 AND O.order_state=0 AND DATE(NOW()) >= DATE_SUB(O.created_at, INTERVAL O.term DAY) order by O.hope_price desc limit 1;";
         Object[] getOrderPriceParams = new Object[]{product_id, user_id,  size_id};
@@ -211,6 +212,7 @@ public class OrderHistoryDao {
                         rs.getString("size_name")),
                 getOrderPriceParams);
     }
+
     //즉시 판매하기
     public int tradeSelling(int trader_id, PatchtradeSellingReq patchtradeSellingReq) {
         String tradeSellingQuery = "update ORDER_HISTORY set trader_id = ? ,address = ? ,bank = ?, account = ?, seller_name = ? , total_price = hope_price-point, order_state = 1, complete_time = CURRENT_TIMESTAMP where order_id = ? ";
@@ -223,6 +225,7 @@ public class OrderHistoryDao {
                 patchtradeSellingReq.getOrder_id()};
         return this.jdbcTemplate.update(tradeSellingQuery,tradeSellingParams);
     }
+
     //즉시 구매하기
     public int tradeBuy(int trader_id, PatchtradeBuyReq patchtradeBuyReq) {
         String tradeBuyQuery = "update ORDER_HISTORY set trader_id = ? ,total_price = hope_price - ?, order_state = 1, complete_time = CURRENT_TIMESTAMP where order_id = ? ";
@@ -239,11 +242,13 @@ public class OrderHistoryDao {
         int pointParam = order_id;
         return this.jdbcTemplate.queryForObject(pointQuery, int.class, pointParam);
     }
+
     public int getMinusPoint(int order_id){
         String pointQuery = "select point from ORDER_HISTORY where order_id = ? ";
         int pointParam = order_id;
         return this.jdbcTemplate.queryForObject(pointQuery, int.class, pointParam);
     }
+
     public int getUserId(int order_id){
         String userQuery = "select user_id from ORDER_HISTORY where order_id = ? ";
         int userParam = order_id;
@@ -261,6 +266,7 @@ public class OrderHistoryDao {
         Object[] minusPointParam =  new Object[]{point, trader_id};
          this.jdbcTemplate.update(minusPointQuery,minusPointParam);
     }
+
     public void createPointHistory(int user_id, int order_id, int point, String type){
         String createUserQuery = "insert into POINT_HISTORY (user_id, order_id, point, type) VALUES (?,?,?,?)";
         Object[] createUserParams = new Object[]{user_id, order_id, point, type};
@@ -269,6 +275,7 @@ public class OrderHistoryDao {
         String lastInsertIdQuery = "select last_insert_id()";
          this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
     }
+
     public int createDealSell(PostDealSellReq postDealSellReq){
         String createUserQuery = "INSERT INTO ORDER_HISTORY(user_id, product_id, size_id, type,point, hope_price , term, return_address, account)\n" +
                 "VALUES (?,?,?,'sell',?,?,?,?,?)";
@@ -295,6 +302,7 @@ public class OrderHistoryDao {
 
         return this.jdbcTemplate.update(deleteQuery,deleteParams);
     }
+
     public List<GetTradePriceRes> getTradePrice(int product_id){
         String getTradePriceQuery = "select O.order_id, S.size_name, O.complete_time, TIMESTAMPDIFF(day, O.complete_time, now()) as time_diff, O.total_price from ORDER_HISTORY O JOIN SIZE S on O.size_id = S.size_id where O.order_state=1 and O.product_id = ? order by time_diff";
         int getTradePriceParams = product_id;
@@ -307,6 +315,7 @@ public class OrderHistoryDao {
                         rs.getInt("total_price")),
                 getTradePriceParams);
     }
+
     public List<GetTradePriceRes> getTradePriceBySize(int product_id, int size_id){
         String getTradePriceQuery = "select O.order_id, S.size_name, O.complete_time, TIMESTAMPDIFF(day, O.complete_time, now()) as time_diff, O.total_price from ORDER_HISTORY O JOIN SIZE S on O.size_id = S.size_id where O.order_state=1 and O.product_id = ? and O.size_id = ? order by time_diff";
         Object[] getTradePriceParams = new Object[]{product_id, size_id};

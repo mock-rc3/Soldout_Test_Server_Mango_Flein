@@ -1,9 +1,6 @@
 package com.example.demo.src.wish;
 
 import com.example.demo.config.BaseException;
-
-import com.example.demo.src.address.model.PostAddressReq;
-import com.example.demo.src.address.model.PostAddressRes;
 import com.example.demo.src.wish.model.PostWishReq;
 import com.example.demo.src.wish.model.PostWishRes;
 import org.slf4j.Logger;
@@ -13,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
 import static com.example.demo.config.BaseResponseStatus.FAIL_DELETE_ADDRESS;
-
 
 @Service
 public class WishService {
@@ -26,11 +22,13 @@ public class WishService {
         this.wishDao = wishDao;
     }
 
+    // POST 찜 추가
     public PostWishRes createWish(int userId, PostWishReq postWishReq) throws BaseException {
         int newWish = wishDao.createWish(userId, postWishReq);
         return new PostWishRes(newWish);
     }
 
+    // PATCH 찜 삭제
     public void deleteWish(int favoriteId) throws BaseException {
         try {
             int result = wishDao.deleteWish(favoriteId);

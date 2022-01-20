@@ -1,19 +1,18 @@
 package com.example.demo.src.magazine;
 
-import com.example.demo.src.address.model.GetAddressRes;
 import com.example.demo.src.magazine.model.GetMagazineDetailRes;
 import com.example.demo.src.magazine.model.GetMagazineRes;
-import com.example.demo.src.user.model.GetUserRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
 import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
 public class MagazineDao {
+
     private JdbcTemplate jdbcTemplate;
+
     @Autowired
     public void setDataSource(DataSource dataSource){
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -54,6 +53,7 @@ public class MagazineDao {
                         rs.getString("contents_url")),
                 getMagazineDetailParams);
     }
+
     public int checkMagazineId(int magazine_id){
         String checkMagazineIdQuery = "select exists(select magazine_id from MAGAZINE where magazine_id = ?)";
         int checkMagazineIdParams = magazine_id;
@@ -61,6 +61,7 @@ public class MagazineDao {
                 int.class,
                 checkMagazineIdParams);
     }
+
     public int checkMagazineType(String type){
         String checkMagazineTypeQuery = "select exists(select type from MAGAZINE where type = ?)";
         String checkMagazineTypeParams = type;

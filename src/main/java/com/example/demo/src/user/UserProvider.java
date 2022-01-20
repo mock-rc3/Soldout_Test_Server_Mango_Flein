@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import static com.example.demo.config.BaseResponseStatus.*;
 
-//Provider : Read의 비즈니스 로직 처리
 @Service
 public class UserProvider {
 
@@ -29,6 +28,7 @@ public class UserProvider {
         this.jwtService = jwtService;
     }
 
+    // GET 회원 정보 조회
     public GetUserRes getUser(int user_id) throws BaseException {
         User user = userDao.getUserId(user_id);
         String password;
@@ -50,6 +50,7 @@ public class UserProvider {
 
     }
 
+    // POST 로그인
     public PostLoginRes logIn(PostLoginReq postLoginReq) throws BaseException{
         User user = userDao.getPwd(postLoginReq);
         String password;
@@ -67,9 +68,9 @@ public class UserProvider {
         else{
             throw new BaseException(FAILED_TO_LOGIN);
         }
-
     }
 
+    // GET 아이디 찾기
     public GetFindIdRes findId(String name, String phoneNum) throws BaseException {
         try {
             GetFindIdRes getFindIdRes= userDao.findId(name,phoneNum);

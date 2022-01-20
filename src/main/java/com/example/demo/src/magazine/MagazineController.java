@@ -24,11 +24,14 @@ public class MagazineController {
     }
 
     /**
-     *  전체 매거진 조회 API
-     *  [GET] /magazines
-     *  타입별 매거진 조회 API
-     *  [GET] /magazines ? type=
-     *  @return BaseResponse<List<GetMagazineRes>>
+     * 전체 매거진 조회 API
+     * [GET] /magazines
+     *
+     * 타입별 매거진 조회 API
+     * [GET] /magazines ? type=
+     *
+     * @param type 매거진 종류
+     * @return BaseResponse<List<GetMagazineRes>>
      */
     @ResponseBody
     @GetMapping("")
@@ -45,11 +48,10 @@ public class MagazineController {
         }
     }
 
-
     /**
      * 매거진 상세화면 API
      * [GET] /magazines/:magazineid
-     *
+     * @param magazine_id 매거진 아이디
      * @return BaseResponse<GetUserRes>
      */
     @ResponseBody
@@ -62,5 +64,4 @@ public class MagazineController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-
 }

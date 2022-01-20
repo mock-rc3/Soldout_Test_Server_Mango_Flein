@@ -22,6 +22,7 @@ public class WishProvider {
         this.wishDao = wishDao;
     }
 
+    // GET 찜 목록 조회
     public List<GetWishRes> getWish(int userId) throws BaseException {
        try {
             List<GetWishRes> getWishRes = wishDao.getWish(userId);
@@ -31,6 +32,7 @@ public class WishProvider {
        }
     }
 
+    // GET 사이즈 목록 조회
     public List<GetSizeRes> getSize(int user_id, int product_id) throws BaseException {
         try {
             List<GetSizeRes> getSizeRes = wishDao.getSize(user_id,product_id);

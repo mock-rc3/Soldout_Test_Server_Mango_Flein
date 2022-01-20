@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
@@ -162,9 +161,12 @@ public class OrderHistoryController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
     /**
      * 타입별 입찰 주문 조회 API
      * [GET] /orderhistory/:productId/:type
+     * @param product_id
+     * @param type 입찰 타입 - 구매/판매
      * @return BaseResponse<List < GetOrderRes>>
      */
     @ResponseBody
@@ -180,9 +182,12 @@ public class OrderHistoryController {
     }
 
     /**
-     *  사이즈별 입찰 주문 조회 API
-     *  [GET] /orderhistory/:productId/:type/:size
-     *  @return BaseResponse<List < GetOrderRes>>
+     * 사이즈별 입찰 주문 조회 API
+     * [GET] /orderhistory/:productId/:type/:size
+     * @param product_id
+     * @param type 입찰 타입 - 구매/판매
+     * @param size_id
+     * @return BaseResponse<List<GetOrderRes>>
      */
     @ResponseBody
     @GetMapping("/{productId}/{type}/{sizeId}")
@@ -200,7 +205,9 @@ public class OrderHistoryController {
     /**
      * 즉시 구매가/판매가 조회 API
      * [GET] /orderhistory/price/:type/:productId
-     * @return BaseResponse<List < GetOrderPriceRes>>
+     * @param product_id
+     * @param type 거래 타입 - 구매/판매
+     * @return BaseResponse<List<GetOrderPriceRes>>
      */
     @ResponseBody
     @GetMapping("/price/{type}/{productId}")
@@ -223,8 +230,11 @@ public class OrderHistoryController {
 
     /**
      * 특정 사이즈별 즉시 구매가/판매가 조회 API
+     * @param type
+     * @param product_id
+     * @param size_id
      * [GET] /orderhistory/price/:type/:productId/:sizeId
-     * @return BaseResponse<List < GetOrderPriceRes>>
+     * @return BaseResponse<List<GetOrderPriceRes>>
      */
     @ResponseBody
     @GetMapping("/price/{type}/{productId}/{sizeId}")
@@ -246,7 +256,13 @@ public class OrderHistoryController {
         }
     }
 
-
+    /**
+     * 즉시 구매 API
+     * [PATCH] /orderhistory/trade/selling/:userId
+     * @param userId
+     * @param patchtradeBuyReq
+     * @return
+     */
     @ResponseBody
     @PatchMapping("/trade/buy/{userId}")
     public BaseResponse<String> tradeBuy(@PathVariable("userId") int userId, @RequestBody  PatchtradeBuyReq patchtradeBuyReq) {
@@ -255,6 +271,9 @@ public class OrderHistoryController {
             if (userId != trader_id) {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
+            if(orderHistoryProvider.checkOrderIdExist(patchtradeBuyReq.getOrder_id()) == 0){
+                return new BaseResponse<>(NOT_ORDERHISTORY_EXISTS_ORDERID);
+            }
             orderHistoryService.tradeBuy(trader_id, patchtradeBuyReq);
             String result = "성공";
             return new BaseResponse<>(result);
@@ -262,6 +281,14 @@ public class OrderHistoryController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    /**
+     * 즉시 판매 API
+     * [PATCH] /orderhistory/trade/selling/:userId
+     * @param userId
+     * @param patchtradeSellingReq
+     * @return BaseResponse<String>
+     */
     @ResponseBody
     @PatchMapping("/trade/selling/{userId}")
     public BaseResponse<String> tradeSelling(@PathVariable("userId") int userId, @RequestBody PatchtradeSellingReq patchtradeSellingReq) {
@@ -270,6 +297,9 @@ public class OrderHistoryController {
             if (userId != trader_id) {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
+            if(orderHistoryProvider.checkOrderIdExist(patchtradeSellingReq.getOrder_id()) == 0){
+                return new BaseResponse<>(NOT_ORDERHISTORY_EXISTS_ORDERID);
+            }
             orderHistoryService.tradeSelling(trader_id,patchtradeSellingReq);
             String result = "성공";
             return new BaseResponse<>(result);
@@ -277,10 +307,12 @@ public class OrderHistoryController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
     /**
      * 최근거래가 조회 API
      * [GET] /orderhistory/trade/:productId
-     * @return BaseResponse<List <GetTradePriceRes>>
+     * @param product_id
+     * @return BaseResponse<List<GetTradePriceRes>>
      */
     @ResponseBody
     @GetMapping("/trade/{productId}")
@@ -293,9 +325,12 @@ public class OrderHistoryController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
     /**
      * 최근거래가 사이즈 별 조회 API
      * [GET] /orderhistory/trade/:productId/:sizeId
+     * @param product_id
+     * @param size_id
      * @return BaseResponse<List <GetTradePriceRes>>
      */
     @ResponseBody

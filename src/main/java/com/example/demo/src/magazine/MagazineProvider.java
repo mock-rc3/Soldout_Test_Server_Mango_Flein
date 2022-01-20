@@ -1,16 +1,13 @@
 package com.example.demo.src.magazine;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.address.model.GetAddressRes;
 import com.example.demo.src.magazine.model.GetMagazineDetailRes;
 import com.example.demo.src.magazine.model.GetMagazineRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-
 import static com.example.demo.config.BaseResponseStatus.*;
 
 @Service
@@ -24,6 +21,7 @@ public class MagazineProvider {
         this.magazineDao = magazineDao;
     }
 
+    //GET 전체 매거진 조회
     public List<GetMagazineRes> getAllMagazines() throws BaseException {
         try {
             List<GetMagazineRes> getMagazineRes = magazineDao.getAllMagazines();
@@ -33,6 +31,7 @@ public class MagazineProvider {
         }
     }
 
+    //GET 타입별 매거진 조회
     public List<GetMagazineRes> getMagazinesByType(String type) throws BaseException {
         if(checkMagazineType(type)){
             throw new BaseException(MAGAZINES_EMPTY_TYPE);
@@ -45,6 +44,7 @@ public class MagazineProvider {
         }
     }
 
+    //GET 매거진 상세회면
     public GetMagazineDetailRes getMagazineDetail(int magazine_id) throws BaseException {
         if(checkMagazineId(magazine_id)){
             throw new BaseException(MAGAZINES_EMPTY_ID);
@@ -56,6 +56,7 @@ public class MagazineProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
     public boolean checkMagazineId(int magazine_id) throws BaseException{
         try{
             boolean result = true;
@@ -67,6 +68,7 @@ public class MagazineProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
     public boolean checkMagazineType(String type) throws BaseException{
         try{
             boolean result = true;

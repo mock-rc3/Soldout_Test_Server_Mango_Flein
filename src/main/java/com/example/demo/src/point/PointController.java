@@ -24,7 +24,6 @@ public class PointController {
     @Autowired
     private final JwtService jwtService;
 
-
     public PointController(PointProvider pointProvider, JwtService jwtService) {
         this.pointProvider = pointProvider;
         this.jwtService = jwtService;
@@ -33,7 +32,8 @@ public class PointController {
     /**
      *  포인트 내역 조회 API
      *  [GET] /points/:userId
-     *  @return BaseResponse<List<>>
+     *  @param userId
+     *  @return BaseResponse<List<GetPointHistoryRes>>
      */
     @ResponseBody
     @GetMapping("/history/{userId}")
@@ -49,10 +49,13 @@ public class PointController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
     /**
      *  타입별 포인트 내역 조회 API
      *  [GET] /points/:userId/:type
-     *  @return BaseResponse<List<>>
+     *  @param userId
+     *  @param type 포인트 타입 - 사용/적립/소멸/취소
+     *  @return BaseResponse<List<GetPointHistoryRes>>
      */
     @ResponseBody
     @GetMapping("/history/{userId}/{type}")
@@ -72,14 +75,16 @@ public class PointController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
     /**
-     *  포인트 내역 조회 API
+     *  포인트 조회 API
      *  [GET] /points/:userId
-     *  @return BaseResponse<>
+     *  @param userId
+     *  @return BaseResponse<GetPointRes>
      */
     @ResponseBody
     @GetMapping("/{userId}")
-    public BaseResponse<GetPointRes> getPontHistoryByType(@PathVariable("userId") int userId){
+    public BaseResponse<GetPointRes> getPoint(@PathVariable("userId") int userId){
         try {
             int user_id = jwtService.getUserId();
             if (userId != user_id) {
@@ -91,5 +96,4 @@ public class PointController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-
 }

@@ -36,9 +36,11 @@ public class WishController {
         this.wishService = wishService;
         this.jwtService = jwtService;
     }
+
     /**
-     *  고객 찜 조회 API
+     *  찜 목록 조회 API
      *  [GET] /wishes/:userId
+     *  @param userId 유저 아이디
      *  @return BaseResponse<List<GetWishRes>>
      */
     @ResponseBody
@@ -55,10 +57,12 @@ public class WishController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
     /**
-     *  사이즈 조회 API
+     *  사이즈 목록 조회 API
      *  [GET] /wishes/size/:productId
-     *  @return BaseResponse<List<GetWishRes>>
+     *  @param product_id 상품 아이디
+     *  @return BaseResponse<List<GetSizeRes>>
      */
     @ResponseBody
     @GetMapping("/size/{productId}")
@@ -73,9 +77,11 @@ public class WishController {
     }
 
     /**
-     * 찜 생성 /wishes/:userId
+     * 찜 추가 API
+     * [POST] /wishes/:userId
+     * @param userId
      * @param postWishReq
-     * @return
+     * @return BaseResponse<PostWishRes>
      */
     @ResponseBody
     @PostMapping("/{userId}")
@@ -92,12 +98,14 @@ public class WishController {
         }
     }
 
+
     /**
-     * * 찜 삭제 /wishes/:wishId/:userId/delete
-     * @param favoriteId
+     * 찜 삭제 API
+     * [PATCH] /wishes/:wishId/:userId/delete
+     * @param favoriteId 찜 아이디
+     * @param userId 유저 아이디
      * @return BaseResponse<String>
      */
-
     @ResponseBody
     @PatchMapping("/{wishId}/{userId}/delete")
     @Transactional(rollbackFor = Exception.class)
