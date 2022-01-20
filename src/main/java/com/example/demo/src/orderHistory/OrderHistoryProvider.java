@@ -63,6 +63,24 @@ public class OrderHistoryProvider {
         }
     }
 
+    public int checkOrderIdExist(int orderId) throws BaseException {
+        try{
+            return orderHistoryDao.checkOrderIdExist(orderId);
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public int checkTypesExist(String types) throws BaseException {
+        try{
+            return orderHistoryDao.checkTypesExist(types);
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     public List<GetOrderRes> getOrderBySize(int product_id, int user_id, String type, int size_id) throws BaseException {
         try {
             List<GetOrderRes> getOrderRes = orderHistoryDao.getOrderBySize(product_id, user_id, type, size_id);

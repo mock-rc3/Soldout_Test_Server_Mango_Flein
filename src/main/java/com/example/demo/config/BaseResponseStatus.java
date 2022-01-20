@@ -39,9 +39,16 @@ public enum BaseResponseStatus {
     POST_USERS_EMPTY_PHONENUM(false, 2026, "핸드폰번호를 입력해주세요."),
     POST_USERS_EXISTS_PHONENUM(false,2027,"중복된 핸드폰번호입니다."),
     POST_USERS_INVALID_NICKNAME(false, 2028, "닉네임 규칙에 맞지 않습니다. 3자~8자로 구성해주세요."),
-
     ONLY_BUY_SELL(false,2030,"buy나 sell만 입력해주세요"),
 
+    // [GET] /Products
+    NOT_PRODUCTS_EXISTS_CATEGORY(false, 2100, "없는 카테고리 입니다"),
+    NOT_PRODUCTS_EXISTS_BRANDNAME(false, 2101, "없는 브랜드 입니다"),
+    NOT_PRODUCTS_EXISTS_PRODUTID(false, 2102, "올바르지 않는 productId 입니다"),
+    NOT_PRODUCTS_EXISTS_TYPES(false, 2103, "올바르지 않는 거래방법 입니다"),
+
+    // [GET] /Orderhistory
+    NOT_ORDERHISTORY_EXISTS_ORDERID(false, 2200, "올바르지 않는 orderId 입니다"),
     /**
      * 3000 : Response 오류
      */

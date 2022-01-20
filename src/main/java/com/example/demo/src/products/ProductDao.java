@@ -107,6 +107,33 @@ public class ProductDao {
         );
     }
 
+    //카테고리 확인
+    public int checkCategoryExist(String category){
+        String checkExistCategoryQuery = "SELECT (EXISTS(SELECT * FROM PRODUCT WHERE category = ?))";
+        Object[] checkExistCategoryParams = new Object[]{category};
+        return this.jdbcTemplate.queryForObject(checkExistCategoryQuery, int.class, checkExistCategoryParams);
+    }
+
+    //브랜드명 확인
+    public int checkBrandExist(String brandName){
+        String checkExistBrandQuery = "SELECT (EXISTS(SELECT * FROM PRODUCT WHERE brand = ?))";
+        Object[] checkExistBrandParams = new Object[]{brandName};
+        return this.jdbcTemplate.queryForObject(checkExistBrandQuery, int.class, checkExistBrandParams);
+    }
+
+    //productId 확인
+    public int checkProductIdExist(int productId){
+        String checkExistProductIdQuery = "SELECT (EXISTS(SELECT * FROM PRODUCT WHERE product_id = ?))";
+        Object[] checkExistProductIdParams = new Object[]{productId};
+        return this.jdbcTemplate.queryForObject(checkExistProductIdQuery, int.class, checkExistProductIdParams);
+    }
+
+    //types 확인
+    public int checkTypesExist(String types){
+        String checkExistTypeQuery = "SELECT (EXISTS(SELECT * FROM ORDER_HISTORY WHERE type = ?))";
+        Object[] checkExistTypeParams = new Object[]{types};
+        return this.jdbcTemplate.queryForObject(checkExistTypeQuery, int.class, checkExistTypeParams);
+    }
 
     //메인페이지 배너, 특정 검색어 제품  조회
     public List<GetGoodsRes> getGoodsList(){
