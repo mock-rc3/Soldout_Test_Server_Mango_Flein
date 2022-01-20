@@ -1,0 +1,15 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: demo
+
+  datasource:
+    platform: mysql
+    url: jdbc:mysql://rc3-soldout.cqesugzhomqg.ap-northeast-2.rds.amazonaws.com:3306/SOLDOUT?autoReconnect=true # 변경해주세요
+    username: minadmin
+    password: soldout135!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    open-in-view: false

@@ -172,6 +172,8 @@ com/example/demo/utils/AES128.java
  com.example.demo.utils.AES128
 com/example/demo/src/notices/model/PostNoticeReq.java
  com.example.demo.src.notices.model.PostNoticeReq
+com/example/demo/src/kakao/model/KakaoRes.java
+ com.example.demo.src.kakao.model.KakaoRes
 com/example/demo/src/WebSecurityConfig.java
  com.example.demo.src.WebSecurityConfig
 com/example/demo/src/user/model/PostLoginReq.java
